@@ -1,6 +1,12 @@
-import { createStore } from "vuex";
+import { createStore, Store } from "vuex";
 import employees from "./modules/employee";
 
-export default createStore({
-  modules: { employees },
+import { RootState } from "@/types";
+
+const store: Store<RootState> = createStore({
+  modules: {
+    employees,
+  },
 });
+
+export default store;

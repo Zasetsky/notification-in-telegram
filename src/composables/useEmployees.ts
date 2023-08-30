@@ -1,22 +1,27 @@
-import { ref, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 
 export function useEmployees() {
   const store = useStore();
-  const firstName = ref("");
-  const lastName = ref("");
-  const selectedEmployee = ref(null);
-
-  onMounted(async () => {
-    await store.dispatch("employees/fetchEmployees");
+  const selectedEmployees = computed(() => {
+    return store.getters["employees/getSelectedEmployees"];
   });
 
-  const employees = store.state.employees;
+  const addUser = () => {
+    const newUser = {
+      name: "",
+      telegramID: "",
+      selectedEmployeeID: null,
+    };
+    selectedEmployees.value.push(newUser);
+  };
+
+  onMounted(async () => {
+    await store.dispatch("employees/fetchSelectedEmployees");
+  });
 
   return {
-    firstName,
-    lastName,
-    employees,
-    selectedEmployee,
+    selectedEmployees,
+    addUser,
   };
 }

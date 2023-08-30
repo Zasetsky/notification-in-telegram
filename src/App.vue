@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import EmployeeComponent from "./components/EmployeeComponent.vue";
+import EmployeeComponent from "./components/employee-component/EmployeeComponent.vue";
 
 export default defineComponent({
   name: "App",
