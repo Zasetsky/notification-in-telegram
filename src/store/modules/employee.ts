@@ -23,6 +23,12 @@ const employees: Module<EmployeesState, RootState> = {
     setSelectedEmployees(state, employees: SelectedEmployee[]) {
       state.selectedEmployees = employees;
     },
+
+    deleteSelectedEmployee(state, id) {
+      state.selectedEmployees = state.selectedEmployees.filter(
+        (employee) => employee.id !== id
+      );
+    },
   },
 
   actions: {

@@ -20,13 +20,10 @@
     color: var(--el-text-color-regular);
     font-size: 12px;
     font-weight: 400;
-    width: max-content;
     border-radius: 4px;
     background: var(--el-fill-color-light);
     padding: 8px 12px;
-    margin-left: 30px;
-    margin-top: 30px;
-    margin-bottom: 0;
+    margin: 30px 30px 0 30px;
 
     span {
       color: var(--el-color-primary);
@@ -40,18 +37,18 @@
 
   &__grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    font-weight: bold;
+    grid-template-columns: 1fr 1fr 1fr 15px;
     grid-gap: 14px;
     margin-bottom: 20px;
   }
 
   &__header-item {
     font-size: 14px;
+    font-weight: 500;
+    width: calc(100% - 24px);
   }
 
   .el-button--text {
-    background-color: var(--el-fill-color-light);
     padding: 8px;
     font-weight: 600;
   }
@@ -62,7 +59,7 @@
   }
 
   .el-button--text:not(.is-disabled):focus {
-    background-color: var(--el-fill-color-light);
+    background-color: none;
     color: var(--el-color-primary);
   }
 }

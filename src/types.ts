@@ -4,9 +4,11 @@ export interface Employee {
 }
 
 export interface SelectedEmployee {
+  id: number;
   name: string;
   telegramID: string;
-  selectedEmployeeID: number;
+  selectedEmployeeID: number | null;
+  isNew: boolean;
 }
 
 export interface EmployeesState {
