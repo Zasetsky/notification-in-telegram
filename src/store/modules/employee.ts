@@ -6,7 +6,15 @@ const employees: Module<EmployeesState, RootState> = {
   namespaced: true,
   state: {
     employees: [],
-    selectedEmployees: [],
+    selectedEmployees: [
+      {
+        id: null,
+        name: "",
+        telegramID: "",
+        selectedEmployeeID: null,
+        isNew: true,
+      },
+    ],
   },
 
   getters: {
@@ -28,6 +36,22 @@ const employees: Module<EmployeesState, RootState> = {
       state.selectedEmployees = state.selectedEmployees.filter(
         (employee) => employee.id !== id
       );
+    },
+
+    updateSelectedEmployee(
+      state,
+      { id, name, telegramID, selectedEmployeeID, isNew }
+    ) {
+      const employeeIndex = state.selectedEmployees.findIndex(
+        (employee) => employee.id === id
+      );
+      if (employeeIndex !== -1) {
+        state.selectedEmployees[employeeIndex].name = name;
+        state.selectedEmployees[employeeIndex].telegramID = telegramID;
+        state.selectedEmployees[employeeIndex].selectedEmployeeID =
+          selectedEmployeeID;
+        state.selectedEmployees[employeeIndex].isNew = isNew;
+      }
     },
   },
 

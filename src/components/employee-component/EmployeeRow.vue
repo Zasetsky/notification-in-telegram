@@ -4,7 +4,7 @@
       <div class="employee-row__item">
         <el-input
           v-model="name"
-          placeholder="Имя"
+          placeholder="Введите имя"
           :class="{ 'error-border': nameError && !nameFocused }"
           @focus="nameFocused = true"
           @blur="
@@ -19,7 +19,7 @@
       <div class="employee-row__item">
         <el-input
           v-model="telegramID"
-          placeholder="ID в Telegram"
+          placeholder="Укажите ID"
           :class="{ 'error-border': telegramIDError && !telegramIDFocused }"
           @focus="telegramIDFocused = true"
           @blur="

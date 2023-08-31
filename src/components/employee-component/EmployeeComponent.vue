@@ -4,9 +4,9 @@
       Сотрудники <span> / инструкция</span>
     </h4>
     <p class="employee-component--info">
-      Сопоставьте менеджеров в AmoCRM и Telegram для дальнейшей работы со
+      Сопоставьте менеджеров в amoCRM и Telegram для дальнейшей работы со
       сценариями. Чтобы получить ID в Telegram, запустите бота
-      <span>rkrs_bot</span>
+      <a href="_ref">rkrs_bot</a>
     </p>
     <div class="employee-component__grid-wrapper">
       <div class="employee-component__grid">

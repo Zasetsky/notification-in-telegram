@@ -22,69 +22,114 @@ export function useEmployeeRows() {
     return store.getters["employees/getSelectedEmployees"];
   });
 
-  const checkAndSubmit = async (field: string, isNew: boolean, id: number) => {
+  // Валидация полей формы
+  const validateFields = () => {
+    // Устанавливаем ошибку для имени, если оно не введено
+    nameError.value = !name.value;
+    // Устанавливаем ошибку для ID в Telegram, если он не введен
+    telegramIDError.value = !telegramID.value;
+  };
+
+  // Проверка, нужно ли отправлять данные на сервер
+  const shouldSendData = (isNew: boolean, id: number | null) => {
+    // Если это не новый сотрудник, ищем его в списке выбранных сотрудников
+    if (!isNew) {
+      const existingEmployee = selectedEmployees.value.find(
+        (employee) => employee.id === id
+      );
+      // Если сотрудник найден, сравниваем поля
+      if (existingEmployee) {
+        return (
+          existingEmployee.name !== name.value ||
+          existingEmployee.telegramID !== telegramID.value ||
+          existingEmployee.selectedEmployeeID !== selectedEmployeeID.value
+        );
+      }
+    }
+    // Если это новый сотрудник, отправляем данные
+    return true;
+  };
+
+  // Отправка данных на сервер
+  const sendData = async (apiUrl: string, id: number | null) => {
+    try {
+      // Отправляем POST-запрос с данными сотрудника
+      await axios.post(apiUrl, {
+        name: name.value,
+        telegramID: telegramID.value,
+        selectedEmployeeID: selectedEmployeeID.value,
+        isNew: false,
+      });
+
+      // Обновляем данные сотрудника в хранилище Vuex
+      store.commit("employees/updateSelectedEmployee", {
+        id,
+        name: name.value,
+        telegramID: telegramID.value,
+        selectedEmployeeID: selectedEmployeeID.value,
+        isNew: false,
+      });
+
+      // Сбрасываем флаги ошибок
+      nameError.value = false;
+      telegramIDError.value = false;
+    } catch (error) {
+      // Выводим ошибку в консоль, если что-то пошло не так
+      console.error("Ошибка при отправке данных:", error);
+    }
+  };
+
+  // Главная функция для проверки и отправки данных
+  const checkAndSubmit = async (
+    field: string,
+    isNew: boolean,
+    id: number | null
+  ) => {
+    // Определяем URL для API в зависимости от того, новый это сотрудник или нет
     const apiUrl = isNew
       ? "http://localhost:3000/add-employee"
       : "http://localhost:3000/edit-employee";
 
-    // Проверка полей на ошибки
-    nameError.value = !name.value;
-    telegramIDError.value = !telegramID.value;
+    // Валидируем поля
+    validateFields();
 
+    // Проверяем, заполнены ли хотя бы одно из полей
     if (name.value || telegramID.value) {
-      let shouldSend = true;
-
-      if (!isNew) {
-        // Найти сотрудника с данным id в selectedEmployees
-        const existingEmployee = selectedEmployees.value.find(
-          (employee) => employee.id === id
-        );
-
-        if (existingEmployee) {
-          // Сравнение полей
-          shouldSend =
-            existingEmployee.name !== name.value ||
-            existingEmployee.telegramID !== telegramID.value ||
-            existingEmployee.selectedEmployeeID !== selectedEmployeeID.value;
+      // Определяем, нужно ли отправлять данные
+      const shouldSend = shouldSendData(isNew, id);
+      // Если нужно отправить данные и все поля заполнены, отправляем
+      if (shouldSend && name.value && telegramID.value) {
+        await sendData(apiUrl, id);
+      } else {
+        // Устанавливаем флаги ошибок для незаполненных полей
+        if (field === "name" && !name.value) {
+          nameError.value = true;
         }
-      }
-
-      if (shouldSend) {
-        if (name.value && telegramID.value) {
-          try {
-            await axios.post(apiUrl, {
-              name: name.value,
-              telegramID: telegramID.value,
-              selectedEmployeeID: selectedEmployeeID.value,
-              isNew: false,
-            });
-          } catch (error) {
-            console.error("Ошибка при отправке данных:", error);
-          }
-
-          // Сброс ошибок
-          nameError.value = false;
-          telegramIDError.value = false;
-        } else {
-          // Установка ошибок для незаполненных полей
-          if (field === "name" && !name.value) {
-            nameError.value = true;
-          }
-
-          if (field === "telegramID" && !telegramID.value) {
-            telegramIDError.value = true;
-          }
+        if (field === "telegramID" && !telegramID.value) {
+          telegramIDError.value = true;
         }
       }
     }
   };
 
-  const deleteEmployee = async (id: number) => {
+  const deleteEmployee = async (id: number | null) => {
     try {
-      await axios.delete(`http://localhost:3000/delete-employee/${id}`);
+      // Проверяем, является ли это последним элементом
+      if (selectedEmployees.value.length > 1) {
+        await axios.delete(`http://localhost:3000/delete-employee/${id}`);
 
-      // Удалить локально из selectedEmployees
-      store.commit("employees/deleteSelectedEmployee", id);
+        // Удалить локально из selectedEmployees
+        store.commit("employees/deleteSelectedEmployee", id);
+      } else {
+        // Если это последний элемент, обнуляем все поля
+        store.commit("employees/updateSelectedEmployee", {
+          id,
+          name: "",
+          telegramID: "",
+          selectedEmployeeID: null,
+          isNew: true,
+        });
+      }
     } catch (error) {
       console.error("Ошибка при удалении сотрудника:", error);
     }

@@ -4,7 +4,7 @@ export interface Employee {
 }
 
 export interface SelectedEmployee {
-  id: number;
+  id: number | null;
   name: string;
   telegramID: string;
   selectedEmployeeID: number | null;
