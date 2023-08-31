@@ -11,7 +11,7 @@ const employees: Module<EmployeesState, RootState> = {
         id: null,
         name: "",
         telegramID: "",
-        selectedEmployeeID: null,
+        selectedEmployeeID: undefined,
         isNew: true,
       },
     ],

@@ -13,7 +13,7 @@ export function useEmployees() {
       id: new Date().getTime(),
       name: "",
       telegramID: "",
-      selectedEmployeeID: null,
+      selectedEmployeeID: undefined,
       isNew: true,
     };
     selectedEmployees.value.push(newUser);

@@ -6,7 +6,7 @@ import axios from "axios";
 export function useEmployeeRows() {
   const name = ref<string>("");
   const telegramID = ref<string>("");
-  const selectedEmployeeID = ref<number | null>(null);
+  const selectedEmployeeID = ref<number | undefined>(undefined);
   const nameError = ref<boolean>(false);
   const telegramIDError = ref<boolean>(false);
   const nameFocused = ref<boolean>(false);

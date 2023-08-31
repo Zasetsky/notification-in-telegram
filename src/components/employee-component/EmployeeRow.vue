@@ -53,6 +53,11 @@
 import { defineComponent, PropType, watch } from "vue";
 import { useEmployeeRows } from "@/composables/useEmployeeRows";
 import { delete_icon } from "@/assets/icons/index";
+import { ElInput, ElSelect, ElOption } from "element-plus";
+import "element-plus/es/components/input/style/css";
+import "element-plus/es/components/select/style/css";
+import "element-plus/es/components/input/style/css";
+import "element-plus/es/components/option/style/css";
 import { SelectedEmployee } from "@/types";
 
 export default defineComponent({
@@ -60,6 +65,9 @@ export default defineComponent({
 
   components: {
     delete_icon,
+    ElInput,
+    ElSelect,
+    ElOption,
   },
 
   props: {

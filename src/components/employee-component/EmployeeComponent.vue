@@ -29,11 +29,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useEmployees } from "@/composables/useEmployees";
+import { ElButton } from "element-plus";
+import "element-plus/es/components/button/style/css";
 import EmployeeRow from "./EmployeeRow.vue";
 
 export default defineComponent({
   name: "EmployeeComponent",
-  components: { EmployeeRow },
+  components: { ElButton, EmployeeRow },
   setup() {
     const { selectedEmployees, addUser } = useEmployees();
 

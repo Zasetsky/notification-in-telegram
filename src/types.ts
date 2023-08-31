@@ -7,7 +7,7 @@ export interface SelectedEmployee {
   id: number | null;
   name: string;
   telegramID: string;
-  selectedEmployeeID: number | null;
+  selectedEmployeeID: number | undefined;
   isNew: boolean;
 }
 
