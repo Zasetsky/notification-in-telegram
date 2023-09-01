@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useEmployees } from "@/composables/useEmployees";
+import { useEmployees } from "@/composables/employee/useEmployees";
 import { ElButton } from "element-plus";
 import "element-plus/es/components/button/style/css";
 import EmployeeRow from "./EmployeeRow.vue";

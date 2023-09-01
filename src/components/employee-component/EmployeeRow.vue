@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, watch } from "vue";
-import { useEmployeeRows } from "@/composables/useEmployeeRows";
+import { useEmployeeRows } from "@/composables/employee/useEmployeeRows";
 import { delete_icon } from "@/assets/icons/index";
 import { ElInput, ElSelect, ElOption } from "element-plus";
 import "element-plus/es/components/input/style/css";
