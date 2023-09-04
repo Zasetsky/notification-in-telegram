@@ -1,0 +1,36 @@
+.notification-dialog {
+  width: 700px;
+  height: 790px;
+  margin: auto;
+  margin-top: 5vh;
+
+  .el-dialog__header {
+    background-color: var(--el-color-primary);
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    padding-bottom: 15px !important;
+    padding-top: 10px;
+  }
+
+  .el-dialog__title {
+    color: var(--el-text-color-overlay);
+  }
+
+  .el-icon {
+    color: var(--el-color-primary-light-5);
+  }
+
+  .el-dialog__headerbtn:focus .el-dialog__close,
+  .el-dialog__headerbtn:hover .el-dialog__close {
+    color: var(--el-color-primary-light-9);
+  }
+  
+  .el-dialog__body {
+    padding: 0;
+  }
+
+  .el-steps--simple {
+    height: 40px;
+  }
+}

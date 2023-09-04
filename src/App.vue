@@ -1,16 +1,16 @@
 <template>
   <div>
-    <EmployeeComponent />
+    <NotificationList />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import EmployeeComponent from "./components/employee-component/EmployeeComponent.vue";
+import NotificationList from "./components/notification-component/NotificationList.vue";
 
 export default defineComponent({
   name: "App",
-  components: { EmployeeComponent },
+  components: { NotificationList },
 });
 </script>
 

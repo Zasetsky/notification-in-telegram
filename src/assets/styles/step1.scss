@@ -1,0 +1,63 @@
+.step-one {
+  display: flex;
+  flex-direction: column;
+  height: 687px;
+
+  &__fields-wrapper {
+    flex-grow: 1;
+    padding: 40px 20px;
+
+    p {
+      color: var(--el-text-color-primary);
+    }
+  }
+
+  .el-transfer {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+
+    .el-transfer-panel {
+      min-width: 250px;
+      height: 410px;
+
+      .el-transfer-panel__body {
+        height: 368px;
+      }
+    }
+
+    .el-transfer__buttons {
+      display: flex;
+      align-items: center;
+      padding: 0 30px;
+      margin-bottom: 30px;
+    }
+  }
+
+  &--input {
+    margin-bottom: 30px;
+  }
+
+  &__button-wrapper {
+    display: flex;
+    justify-content: space-between;
+    background: var(--el-fill-color-light);
+    padding: 20px;
+    font-size: 14px;
+
+    .back-btn {
+      width: 94px;
+      height: 40px;
+      color: var(--el-color-primary);
+      border: 1px solid var(--el-color-primary-light-5);
+      background: var(--el-color-primary-light-9);
+    }
+
+    .next-btn {
+      background-color: var(--el-color-primary);
+      color: var(--el-text-color-overlay);
+      width: 94px;
+      height: 40px;
+    }
+  }
+}
