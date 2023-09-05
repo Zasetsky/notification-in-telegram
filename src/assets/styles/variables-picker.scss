@@ -1,0 +1,44 @@
+.rakurs-var {
+  &__picker-wrapper {
+    border: 1px solid #dedede;
+  }
+
+  .el-select {
+    display: block;
+  }
+
+  .el-row {
+    display: block;
+  }
+
+  .var {
+    color: var(--el-color-primary);
+    font-weight: 600;
+  }
+
+  &__picker {
+    height: 200px;
+    overflow-y: scroll;
+    border-radius: 4px;
+    ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        margin: 0;
+        list-style-type: none;
+        padding-left: 15px;
+      }
+
+      li:hover {
+        background: #f4f4f5;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__input-wrapper {
+    display: flex !important;
+    padding: 0 14px;
+  }
+}

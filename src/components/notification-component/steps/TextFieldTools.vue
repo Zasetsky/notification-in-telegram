@@ -65,27 +65,27 @@ export default defineComponent({
     };
 
     const pushRandomValue = () => {
-      emit("pushChooseValue", `<r>первый вариант|второй вариант</r>`);
+      emit("pushChooseValue", `<r>первый вариант|второй вариант`, `</r>`);
     };
 
     const toolBold = () => {
-      emit("pushChooseValue", `<b></b>`);
+      emit("pushChooseValue", `<b>`, `</b>`);
     };
 
     const toolItalic = () => {
-      emit("pushChooseValue", `<i></i>`);
+      emit("pushChooseValue", `<i>`, `</i>`);
     };
 
     const toolUnderlined = () => {
-      emit("pushChooseValue", `<u></u>`);
+      emit("pushChooseValue", `<u>`, `</u>`);
     };
 
     const toolCrossed = () => {
-      emit("pushChooseValue", `<s></s>`);
+      emit("pushChooseValue", `<s>`, `</s>`);
     };
 
     const toolMono = () => {
-      emit("pushChooseValue", `<pre></pre>`);
+      emit("pushChooseValue", `<pre>`, `</pre>`);
     };
 
     return {
@@ -100,7 +100,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss">
-// Ваши стили
-</style>
