@@ -12,41 +12,58 @@ export default function useTextField() {
     return null;
   };
 
-  const pushBBCodeCustom = (openTag: string, closeTag: string) => {
-    const textArea = currentInput();
-    if (!textArea) return;
-
+  const insertTextAtCursor = (
+    textArea: HTMLTextAreaElement,
+    insertText: string,
+    cursorOffset = 0
+  ) => {
     const { selectionStart: start, selectionEnd: end, value } = textArea;
 
     const beforeCursor = value.substring(0, start);
     const afterCursor = value.substring(end);
 
-    textArea.value = `${beforeCursor}${openTag}${closeTag}${afterCursor}`;
-    text.value = textArea.value;
+    textArea.value = `${beforeCursor}${insertText}${afterCursor}`;
+    const newCursorPos = start + cursorOffset;
 
-    const newCursorPos = start + openTag.length;
+    // Устанавливаем фокус и перемещаем курсор
     textArea.focus();
     textArea.setSelectionRange(newCursorPos, newCursorPos);
+  };
+
+  const pushBBCodeCustom = (openTag: string, closeTag: string) => {
+    const textArea = currentInput();
+    if (!textArea) return;
+
+    let selectedText = textArea.value.substring(
+      textArea.selectionStart,
+      textArea.selectionEnd
+    );
+
+    if (closeTag === "</r>") {
+      selectedText = "";
+    }
+
+    const insertText = `${openTag}${selectedText}${closeTag}`;
+    insertTextAtCursor(
+      textArea,
+      insertText,
+      textArea.selectionStart + openTag.length + selectedText.length
+    );
+
+    text.value = textArea.value;
   };
 
   const insertVariable = (variable: string) => {
     const textArea = currentInput();
     if (!textArea) return;
 
-    const { selectionStart: start, selectionEnd: end, value } = textArea;
+    insertTextAtCursor(
+      textArea,
+      variable,
+      textArea.selectionStart + variable.length
+    );
 
-    const beforeCursor = value.substring(0, start);
-    const afterCursor = value.substring(end);
-
-    textArea.value = `${beforeCursor}${variable}${afterCursor}`;
     text.value = textArea.value;
-
-    const closeBracePos = variable.lastIndexOf("}}");
-    if (closeBracePos !== -1) {
-      const newCursorPos = start + closeBracePos;
-      textArea.focus();
-      textArea.setSelectionRange(newCursorPos, newCursorPos);
-    }
   };
 
   const toggleVariablesPicker = () => {
