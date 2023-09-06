@@ -12,104 +12,91 @@ const buttons: Module<ButtonsState, RootState> = {
   state: {
     buttons: [
       {
-        id: 0,
+        id: "1",
+        title: "Кнопка 1",
         inputValue: "",
-        cascaderValue1: null,
-        cascaderValue2: null,
+        cascaderValue: null,
         linkValue: "",
+        delete_message: false,
+        change_responsible: {
+          deal: false,
+          task: false,
+          company: false,
+        },
       },
     ],
-    cascaderOptions1: [],
-    cascaderOptions2: [],
+    cascaderOptions: [],
   },
 
   getters: {
     getAllButtons: (state): Button[] => state.buttons,
 
-    getInputValue: (state) => (id: number) => {
+    getInputValue: (state) => (id: string) => {
       const button = state.buttons.find((button) => button.id === id);
       return button ? button.inputValue : null;
     },
 
-    getLinkValue: (state) => (id: number) => {
+    getLinkValue: (state) => (id: string) => {
       const button = state.buttons.find((button) => button.id === id);
       return button ? button.linkValue : null;
     },
 
-    getCascaderValue: (state) => (id: number, key: string) => {
+    getCascaderValue: (state) => (id: string) => {
       const button = state.buttons.find((button) => button.id === id);
-      return button
-        ? key === "cascader1"
-          ? button.cascaderValue1
-          : button.cascaderValue2
-        : null;
+      return button?.cascaderValue;
     },
 
-    getCascaderOptions1: (state) => state.cascaderOptions1,
+    getCascaderOptions: (state) => state.cascaderOptions,
 
-    getCascaderOptions2: (state) => state.cascaderOptions2,
+    getChangeResponsible: (state) => (id: string) => {
+      const button = state.buttons.find((button) => button.id === id);
+      return button ? button.change_responsible : null;
+    },
+
+    getDeleteMessage: (state) => (id: string) => {
+      const button = state.buttons.find((button) => button.id === id);
+      return button ? button.delete_message : null;
+    },
   },
 
   mutations: {
-    updateInputValue: (state, payload: { id: number; value: string }) => {
+    updateInputValue: (state, payload: { id: string; value: string }) => {
       const button = state.buttons.find((button) => button.id === payload.id);
       if (button) button.inputValue = payload.value;
     },
 
-    updateLinkValue: (state, payload: { id: number; value: string }) => {
+    updateLinkValue: (state, payload: { id: string; value: string }) => {
       const button = state.buttons.find((button) => button.id === payload.id);
       if (button) button.linkValue = payload.value;
     },
 
-    updateCascaderValue1: (
+    updateCascaderValue: (
       state,
-      { id, value }: { id: number; value: CascaderOption | null }
+      { id, value }: { id: string; value: CascaderOption | null }
     ) => {
       const button = state.buttons.find((button) => button.id === id);
-      if (button) button.cascaderValue1 = value;
+      if (button) button.cascaderValue = value;
     },
 
-    updateCascaderValue2: (
-      state,
-      { id, value }: { id: number; value: CascaderOption | null }
-    ) => {
-      const button = state.buttons.find((button) => button.id === id);
-      if (button) button.cascaderValue2 = value;
-    },
-
-    setCascaderOptions1: (state, options: CascaderOption[]) =>
-      (state.cascaderOptions1 = options),
-
-    setCascaderOptions2: (state, options: CascaderOption[]) =>
-      (state.cascaderOptions2 = options),
+    setCascaderOptions: (state, options: CascaderOption[]) =>
+      (state.cascaderOptions = options),
 
     addButton: (state) => {
+      const newTabIndex = state.buttons.length + 1;
+      const newId = newTabIndex.toString();
       state.buttons.push({
-        id: state.buttons.length,
+        id: newId,
+        title: `Кнопка ${newTabIndex}`,
         inputValue: "",
-        cascaderValue1: null,
-        cascaderValue2: null,
+        cascaderValue: null,
         linkValue: "",
+        delete_message: false,
+        change_responsible: {
+          deal: false,
+          task: false,
+          company: false,
+        },
       });
-    },
-
-    deleteButton: (state, id: number) => {
-      const index = state.buttons.findIndex((button) => button.id === id);
-      if (index !== -1) {
-        if (state.buttons.length === 1) {
-          // Если это последний ряд, очищаем его
-          state.buttons[index] = {
-            id: 0,
-            inputValue: "",
-            cascaderValue1: null,
-            cascaderValue2: null,
-            linkValue: "",
-          };
-        } else {
-          // Иначе удаляем ряд
-          state.buttons.splice(index, 1);
-        }
-      }
     },
 
     addInitialButton: (state, button) => {
@@ -117,6 +104,29 @@ const buttons: Module<ButtonsState, RootState> = {
         // Если данные с сервера пришли и они не пусты, перезаписываем массив
         state.buttons = button;
       }
+    },
+
+    removeButton: (state, targetId: string) => {
+      state.buttons = state.buttons.filter((button) => button.id !== targetId);
+    },
+
+    updateChangeResponsibleField(
+      state,
+      payload: { id: string; field: string; value: boolean }
+    ) {
+      console.log(state.buttons[0].change_responsible);
+      const button = state.buttons.find((button) => button.id === payload.id);
+      if (button && button.change_responsible) {
+        button.change_responsible = {
+          ...button.change_responsible,
+          [payload.field]: payload.value,
+        };
+      }
+    },
+
+    updateDeleteMessage: (state, payload: { id: string; value: boolean }) => {
+      const button = state.buttons.find((button) => button.id === payload.id);
+      if (button) button.delete_message = payload.value;
     },
   },
 
@@ -126,15 +136,16 @@ const buttons: Module<ButtonsState, RootState> = {
         .get("http://localhost:3000/get-initial-button") // Заменить на нужный адрес!!!
         .then((response) => {
           commit("addInitialButton", response.data);
+          console.log(response.data);
         })
         .catch((error) => {
           console.error("Ошибка при получении кнопок:", error);
         });
     },
 
-    fetchCascaderOptions1({ commit }) {
+    fetchCascaderOptions({ commit }) {
       axios
-        .get<CascaderOption[]>("http://localhost:3000/get-cascader1-data") // Заменить на нужный адрес!!!
+        .get<CascaderOption[]>("http://localhost:3000/get-cascader-data") // Заменить на нужный адрес!!!
         .then((response) => {
           const updatedData = response.data.map((item) => ({
             ...item,
@@ -146,25 +157,7 @@ const buttons: Module<ButtonsState, RootState> = {
               : undefined,
           }));
 
-          commit("setCascaderOptions1", updatedData);
-        });
-    },
-
-    fetchCascaderOptions2({ commit }) {
-      axios
-        .get<CascaderOption[]>("http://localhost:3000/get-cascader2-data") // Заменить на нужный адрес!!!
-        .then((response) => {
-          const updatedData = response.data.map((item) => ({
-            ...item,
-            children: item.children
-              ? item.children.map((child) => ({
-                  ...child,
-                  disabled: child.value === "disabled",
-                }))
-              : undefined,
-          }));
-
-          commit("setCascaderOptions2", updatedData);
+          commit("setCascaderOptions", updatedData);
         });
     },
 
@@ -179,6 +172,21 @@ const buttons: Module<ButtonsState, RootState> = {
         .catch((error) => {
           console.error("Ошибка при сохранении настроек:", error);
         });
+    },
+
+    handleTabsEdit: (
+      { commit },
+      {
+        paneName,
+        action,
+      }: { paneName: string | undefined; action: "add" | "remove" }
+    ) => {
+      if (action === "remove" && paneName) {
+        commit("removeButton", paneName);
+      }
+      if (action === "add") {
+        commit("addButton");
+      }
     },
   },
 };

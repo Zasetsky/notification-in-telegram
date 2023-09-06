@@ -5,16 +5,23 @@ export interface CascaderOption {
   disabled?: boolean;
 }
 
+export interface ChandgeResponsible {
+  deal: boolean;
+  task: boolean;
+  company: boolean;
+}
+
 export interface Button {
-  id: number;
+  id: string;
+  title: string;
   inputValue: string;
-  cascaderValue1: CascaderOption | null;
-  cascaderValue2: CascaderOption | null;
+  cascaderValue: CascaderOption | null;
   linkValue: string;
+  delete_message: boolean;
+  change_responsible: ChandgeResponsible;
 }
 
 export interface ButtonsState {
   buttons: Button[];
-  cascaderOptions1: CascaderOption[];
-  cascaderOptions2: CascaderOption[];
+  cascaderOptions: CascaderOption[];
 }
