@@ -15,7 +15,3 @@ export interface EmployeesState {
   employees: Employee[];
   selectedEmployees: SelectedEmployee[];
 }
-
-export interface RootState {
-  employees: EmployeesState;
-}

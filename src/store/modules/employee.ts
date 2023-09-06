@@ -1,6 +1,11 @@
 import { Module } from "vuex";
 import axios from "axios";
-import { EmployeesState, Employee, SelectedEmployee, RootState } from "@/types";
+import {
+  EmployeesState,
+  Employee,
+  SelectedEmployee,
+} from "@/components/employee-component/employeeTypes";
+import { RootState } from "../storeTypes";
 
 const employees: Module<EmployeesState, RootState> = {
   namespaced: true,

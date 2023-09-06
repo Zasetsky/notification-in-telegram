@@ -1,6 +1,6 @@
 import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
-import { SelectedEmployee } from "@/types";
+import { SelectedEmployee } from "@/components/employee-component/employeeTypes";
 
 export function useEmployees() {
   const store = useStore();

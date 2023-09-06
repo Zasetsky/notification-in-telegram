@@ -1,3 +1,20 @@
 .step-two {
   padding: 40px 20px;
+
+  &__select-wrapper {
+    padding: 40px 0;
+    display: flex;
+    align-items: center;
+    
+    p {
+      min-width: max-content;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .el-select {
+      width: 100%;
+      padding-left: 14px;
+    }
+  }
 }

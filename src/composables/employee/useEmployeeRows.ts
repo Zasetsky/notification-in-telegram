@@ -1,6 +1,9 @@
 import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
-import { Employee, SelectedEmployee } from "@/types";
+import {
+  Employee,
+  SelectedEmployee,
+} from "@/components/employee-component/employeeTypes";
 import axios from "axios";
 
 export function useEmployeeRows() {
