@@ -1,5 +1,6 @@
 export { default as delete_icon } from "./delete-icon.vue";
 export { default as chevron_icon } from "./chevron-icon.vue";
+export { default as chevron_back_icon } from "./chevron-back-icon.vue";
 export { default as random_icon } from "./random-icon.vue";
 export { default as variables_icon } from "./variables-icon.vue";
 export { default as bold_icon } from "./bold-icon.vue";

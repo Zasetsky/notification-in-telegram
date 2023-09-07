@@ -5,27 +5,22 @@ import { TabPaneName } from "element-plus";
 export function useButtonsCard() {
   const store = useStore();
   const ActiveButtonTab = ref("1");
-  const buttons = computed(() => store.getters["buttons/getAllButtons"]);
+  const buttons = computed(() => store.getters["notifications/getAllButtons"]);
 
   const handleTabsEdit = (
     paneName: TabPaneName | undefined,
     action: "add" | "remove"
   ) => {
-    store.dispatch("buttons/handleTabsEdit", { paneName, action });
-  };
-
-  const changeTab = (id: string) => {
-    store.dispatch("buttons/changeActiveTab", id);
+    store.dispatch("notifications/handleTabsEdit", { paneName, action });
   };
 
   onMounted(() => {
-    store.dispatch("buttons/fetchInitialButton");
+    store.dispatch("notifications/fetchInitialNotifications");
   });
 
   return {
     ActiveButtonTab,
     buttons,
     handleTabsEdit,
-    changeTab,
   };
 }

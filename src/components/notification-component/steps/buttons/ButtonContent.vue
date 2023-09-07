@@ -6,30 +6,30 @@
         class="button-content__input"
         placeholder="Введите что-то"
       ></el-input>
-      <div class="button-content__link-wrapper">
-        <el-cascader
-          v-model="cascaderValueModel"
-          :options="cascaderOptions"
-          :show-all-levels="isNotLinkValue"
-          class="button-content__cascader button-content__cascader--single"
-          :props="{ expandTrigger: 'hover' }"
-          placeholder="Выберите сценарий"
-        ></el-cascader>
-        <el-input
-          v-if="!isNotLinkValue"
-          v-model="linkValueModel"
-          class="button-content__input link"
-          placeholder="Введите ссылку"
-        >
-        </el-input>
-      </div>
+      <el-cascader
+        v-model="cascaderValueModel"
+        :options="cascaderOptions"
+        :show-all-levels="isNotLinkValue"
+        class="button-content__cascader button-content__cascader--single"
+        :props="{ expandTrigger: 'hover' }"
+        placeholder="Выберите сценарий"
+      ></el-cascader>
+      <el-input
+        v-if="!isNotLinkValue"
+        v-model="linkValueModel"
+        class="button-content__input link"
+        placeholder="Введите ссылку"
+      >
+      </el-input>
     </div>
-    <el-checkbox v-model="deleteMessage"> Удалить сообщение </el-checkbox>
+    <el-checkbox v-model="deleteMessage">
+      Удалить сообщение из чата после нажатия на кнопку
+    </el-checkbox>
     <div class="button-content__responsible-checkboxes">
       <p>Сменить ответственного</p>
-      <el-checkbox v-model="changeResponsibleDeal">Сделка</el-checkbox>
-      <el-checkbox v-model="changeResponsibleTask">Задача</el-checkbox>
-      <el-checkbox v-model="changeResponsibleCompany">Компания</el-checkbox>
+      <el-checkbox v-model="changeResponsibleDeal">В сделке</el-checkbox>
+      <el-checkbox v-model="changeResponsibleTask">В задаче</el-checkbox>
+      <el-checkbox v-model="changeResponsibleCompany">В компании</el-checkbox>
     </div>
   </div>
 </template>
@@ -85,31 +85,32 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .button-content {
+  padding: 20px;
   &__inputs-wrapper {
     display: flex;
-  }
-
-  &--drag-and-drop-icon {
-    display: flex;
-    align-items: center;
-    margin-left: 20px;
-    height: 32px;
-    cursor: grab;
-  }
-
-  &__input {
     width: 100%;
-    height: 32px;
-    margin-left: 10px;
   }
 
-  &__link-wrapper {
-    display: flex;
-    align-items: baseline;
+  .el-input {
     width: 100%;
-    min-height: 32px;
+  }
+  .el-cascader {
+    width: 100%;
+    margin: 0 10px;
+  }
+
+  &__responsible-checkboxes {
+    .el-checkbox {
+      margin-left: 5px;
+    }
+
+    p {
+      color: var(--el-text-color-primary);
+      margin: 0;
+      margin-top: 20px;
+    }
   }
 }
 </style>

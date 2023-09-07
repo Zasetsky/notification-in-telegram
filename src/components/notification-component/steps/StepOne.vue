@@ -16,23 +16,16 @@
         :data="data"
       />
     </div>
-
-    <div class="step-one__button-wrapper">
-      <el-button class="back-btn" @click="goToPreviousStep">Назад</el-button>
-      <el-button class="next-btn" @click="goToNextStep"
-        >Далее <chevron_icon
-      /></el-button>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { ElButton, ElTransfer, ElInput } from "element-plus";
+import { ElTransfer, ElInput } from "element-plus";
+
 import "element-plus/es/components/button/style/css";
 import "element-plus/es/components/transfer/style/css";
 import "element-plus/es/components/input/style/css";
-import { chevron_icon } from "@/assets/icons/index";
 
 interface Option {
   key: number;
@@ -42,10 +35,8 @@ interface Option {
 
 export default defineComponent({
   components: {
-    ElButton,
     ElTransfer,
     ElInput,
-    chevron_icon,
   },
 
   setup(_, { emit }) {

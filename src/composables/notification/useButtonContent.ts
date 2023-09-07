@@ -5,25 +5,28 @@ export function useButtonContent(buttonId: string) {
   const store = useStore();
 
   const cascaderOptions = computed(
-    () => store.getters["buttons/getCascaderOptions"]
+    () => store.getters["notifications/getCascaderOptions"]
   );
 
   const inputValueModel = computed({
-    get: () => store.getters["buttons/getInputValue"](buttonId),
+    get: () => store.getters["notifications/getInputValue"](buttonId),
     set: (value: string) =>
-      store.commit("buttons/updateInputValue", { id: buttonId, value }),
+      store.commit("notifications/updateInputValue", { id: buttonId, value }),
   });
 
   const linkValueModel = computed({
-    get: () => store.getters["buttons/getLinkValue"](buttonId),
+    get: () => store.getters["notifications/getLinkValue"](buttonId),
     set: (value: string) =>
-      store.commit("buttons/updateLinkValue", { id: buttonId, value }),
+      store.commit("notifications/updateLinkValue", { id: buttonId, value }),
   });
 
   const cascaderValueModel = computed({
-    get: () => store.getters["buttons/getCascaderValue"](buttonId),
+    get: () => store.getters["notifications/getCascaderValue"](buttonId),
     set: (value: string) =>
-      store.commit("buttons/updateCascaderValue", { id: buttonId, value }),
+      store.commit("notifications/updateCascaderValue", {
+        id: buttonId,
+        value,
+      }),
   });
 
   const isNotLinkValue = computed(() => {
@@ -32,9 +35,10 @@ export function useButtonContent(buttonId: string) {
   });
 
   const changeResponsibleDeal = computed({
-    get: () => store.getters["buttons/getChangeResponsible"](buttonId).deal,
+    get: () =>
+      store.getters["notifications/getChangeResponsible"](buttonId).deal,
     set: (value: boolean) =>
-      store.commit("buttons/updateChangeResponsibleField", {
+      store.commit("notifications/updateChangeResponsibleField", {
         id: buttonId,
         field: "deal",
         value,
@@ -42,9 +46,10 @@ export function useButtonContent(buttonId: string) {
   });
 
   const changeResponsibleTask = computed({
-    get: () => store.getters["buttons/getChangeResponsible"](buttonId).task,
+    get: () =>
+      store.getters["notifications/getChangeResponsible"](buttonId).task,
     set: (value: boolean) =>
-      store.commit("buttons/updateChangeResponsibleField", {
+      store.commit("notifications/updateChangeResponsibleField", {
         id: buttonId,
         field: "task",
         value,
@@ -52,9 +57,10 @@ export function useButtonContent(buttonId: string) {
   });
 
   const changeResponsibleCompany = computed({
-    get: () => store.getters["buttons/getChangeResponsible"](buttonId).company,
+    get: () =>
+      store.getters["notifications/getChangeResponsible"](buttonId).company,
     set: (value: boolean) =>
-      store.commit("buttons/updateChangeResponsibleField", {
+      store.commit("notifications/updateChangeResponsibleField", {
         id: buttonId,
         field: "company",
         value,
@@ -62,16 +68,16 @@ export function useButtonContent(buttonId: string) {
   });
 
   const deleteMessage = computed({
-    get: () => store.getters["buttons/getDeleteMessage"](buttonId),
+    get: () => store.getters["notifications/getDeleteMessage"](buttonId),
     set: (value: boolean) =>
-      store.commit("buttons/updateDeleteMessage", {
+      store.commit("notifications/updateDeleteMessage", {
         id: buttonId,
         value,
       }),
   });
 
   onMounted(() => {
-    store.dispatch("buttons/fetchCascaderOptions");
+    store.dispatch("notifications/fetchCascaderOptions");
   });
 
   return {

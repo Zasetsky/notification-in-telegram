@@ -1,13 +1,15 @@
 import { createStore, Store } from "vuex";
 import employees from "./modules/employee";
-import buttons from "./modules/buttons";
+import notifications from "./modules/notifications";
+import bots from "./modules/bots";
 
 import { RootState } from "./storeTypes";
 
 const store: Store<RootState> = createStore({
   modules: {
     employees,
-    buttons,
+    notifications,
+    bots,
   },
 });
 

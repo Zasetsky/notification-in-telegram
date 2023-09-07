@@ -1,3 +1,9 @@
+export interface Employee {
+  id: number;
+  name: string;
+}
+
+
 export interface CascaderOption {
   value: string;
   label: string;
@@ -13,15 +19,25 @@ export interface ChandgeResponsible {
 
 export interface Button {
   id: string;
-  title: string;
   inputValue: string;
-  cascaderValue: CascaderOption | null;
+  cascaderValue1: CascaderOption | null;
   linkValue: string;
   delete_message: boolean;
   change_responsible: ChandgeResponsible;
 }
 
-export interface ButtonsState {
+export interface NotificationData {
+  employee: Employee[];
   buttons: Button[];
-  cascaderOptions: CascaderOption[];
+}
+
+export interface Notification {
+  id: string;
+  name: string;
+  data: NotificationData;
+}
+
+export interface NotificationState {
+  notificationItem: Notification[];
+  cascaderOptions1: CascaderOption[];
 }

@@ -9,7 +9,7 @@
       <el-tab-pane
         v-for="item in buttons"
         :key="item.id"
-        :label="item.title"
+        :label="`Кнопка ${item.id}`"
         :name="item.id"
       >
         <ButtonContent :buttonId="item.id" />
@@ -36,14 +36,12 @@ export default defineComponent({
   },
 
   setup() {
-    const { ActiveButtonTab, buttons, handleTabsEdit, changeTab } =
-      useButtonsCard();
+    const { ActiveButtonTab, buttons, handleTabsEdit } = useButtonsCard();
 
     return {
       ActiveButtonTab,
       buttons,
       handleTabsEdit,
-      changeTab,
     };
   },
 });
@@ -51,12 +49,21 @@ export default defineComponent({
 
 <style lang="scss">
 .buttons-card {
-  .tab-header {
-    display: flex;
-    align-items: center;
+  .el-tabs__header {
+    margin: 0;
+  }
+  .el-tabs__content {
+    border: 1px solid var(--el-border-color-light);
+    width: 100%;
+    border-top: none;
+  }
 
-    .el-button {
-      margin-left: 5px;
+  .el-tabs__new-tab:hover {
+    color: var(--el-color-white);
+    background-color: var(--el-color-primary);
+
+    .el-icon {
+      color: var(--el-color-white);
     }
   }
 }

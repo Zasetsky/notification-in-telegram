@@ -12,10 +12,7 @@
         />
       </el-select>
     </div>
-    <div class="step-two__button-component-wrapper">
-      <ButtonsCard />
-    </div>
-    <el-button @click="complete">Завершить</el-button>
+    <ButtonsCard />
   </div>
 </template>
 
@@ -24,11 +21,11 @@ import { defineComponent, ref, computed } from "vue";
 import TextField from "./textarea/TextField.vue";
 import { useStore } from "vuex";
 import { Bot } from "./botTypes";
+import ButtonsCard from "./buttons/ButtonsCard.vue";
 import { ElSelect, ElOption } from "element-plus";
 
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
-import ButtonsCard from "./ButtonsCard.vue";
 
 export default defineComponent({
   components: {
@@ -38,22 +35,16 @@ export default defineComponent({
     ButtonsCard,
   },
 
-  setup(_, { emit }) {
+  setup() {
     const store = useStore();
 
     const selectedBot = ref<Bot | undefined>();
 
     const availableBots = computed(() => store.getters.getAvailableBots);
 
-    const complete = () => {
-      const newData = {};
-      emit("complete", newData);
-    };
-
     return {
       selectedBot,
       availableBots,
-      complete,
     };
   },
 });

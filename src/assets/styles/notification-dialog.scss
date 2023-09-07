@@ -4,6 +4,15 @@
   margin: auto;
   margin-top: 5vh;
 
+  &__button-wrapper {
+    .next-btn {
+      background-color: var(--el-color-primary);
+      color: var(--el-text-color-overlay);
+      width: 94px;
+      height: 40px;
+    }
+  }
+
   .el-dialog__header {
     background-color: var(--el-color-primary);
     margin: 0;
@@ -25,7 +34,7 @@
   .el-dialog__headerbtn:hover .el-dialog__close {
     color: var(--el-color-primary-light-9);
   }
-  
+
   .el-dialog__body {
     padding: 0;
   }

@@ -8,3 +8,5 @@ const app = createApp(App);
 
 app.use(store);
 app.mount("#app");
+
+// ПРОПСЫ!!!! acountId appName глобально
