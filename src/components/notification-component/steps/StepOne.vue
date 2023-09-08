@@ -9,7 +9,7 @@
       <p>Выберите сотрудников, которые будут получать оповещения</p>
 
       <el-transfer
-        v-model="selectedEmployeeIds"
+        v-model="selectedEmployeeKeys"
         filterable
         :filter-method="filterMethod"
         filter-placeholder="State Abbreviations"
@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch, onMounted } from "vue";
+import { defineComponent, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { ElTransfer, ElInput } from "element-plus";
 import { Employee } from "../notificationTypes";
@@ -50,11 +50,10 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const store = useStore();
+
     const allEmployees = computed(() =>
       store.getters["notifications/getEmployees"](props.notificationId)
     );
-
-    const selectedEmployeeIds = ref<number[]>([]);
 
     const transformedEmployees = computed<TransferEmployee[]>(() => {
       return allEmployees.value.map((emp: Employee) => {
@@ -66,14 +65,22 @@ export default defineComponent({
       });
     });
 
-    watch(selectedEmployeeIds, (newVal) => {
-      const selectedEmployees = allEmployees.value.filter((emp: Employee) =>
-        newVal.includes(emp.id)
-      );
-      store.commit("notifications/setEmployees", {
-        notificationId: props.notificationId,
-        employees: selectedEmployees,
-      });
+    const selectedEmployeeKeys = computed({
+      get: () => {
+        const selected = store.getters["notifications/getSelectedEmployees"](
+          props.notificationId
+        );
+        return selected.map((emp: Employee) => emp.id);
+      },
+      set: (newVal: number[]) => {
+        const selected = allEmployees.value.filter((emp: Employee) =>
+          newVal.includes(emp.id)
+        );
+        store.commit("notifications/setSelectedEmployees", {
+          notificationId: props.notificationId,
+          employees: selected,
+        });
+      },
     });
 
     const filterMethod = (
@@ -94,18 +101,17 @@ export default defineComponent({
       emit("previous");
     };
 
-    onMounted(() => {
-      store
-        .dispatch("notifications/fetchEmployees", props.notificationId)
-        .then(() => {
-          console.log("Данные сотрудников:", allEmployees.value);
-          console.log("Преобразованные данные:", transformedEmployees.value);
-        });
+    onMounted(async () => {
+      await store.dispatch("notifications/fetchInitialNotifications");
+      await store.dispatch(
+        "notifications/fetchEmployees",
+        props.notificationId
+      );
     });
 
     return {
       transformedEmployees,
-      selectedEmployeeIds,
+      selectedEmployeeKeys,
       goToNextStep,
       goToPreviousStep,
       filterMethod,

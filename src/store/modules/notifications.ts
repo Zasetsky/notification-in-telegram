@@ -18,6 +18,7 @@ const notifications: Module<NotificationState, RootState> = {
         name: "",
         data: {
           employees: [],
+          selectedEmployees: [],
           buttons: [
             {
               id: "1",
@@ -113,6 +114,15 @@ const notifications: Module<NotificationState, RootState> = {
           (item) => item.id === notificationId
         );
         return notification ? notification.data.employees : [];
+      },
+
+    getSelectedEmployees:
+      (state) =>
+      (notificationId: string): Employee[] => {
+        const notification = state.notificationItem.find(
+          (item) => item.id === notificationId
+        );
+        return notification ? notification.data.selectedEmployees : [];
       },
   },
 
@@ -273,6 +283,18 @@ const notifications: Module<NotificationState, RootState> = {
       );
       if (notification && notification.data) {
         notification.data.employees = payload.employees;
+      }
+    },
+
+    setSelectedEmployees(
+      state,
+      payload: { notificationId: string; employees: Employee[] }
+    ) {
+      const notification = state.notificationItem.find(
+        (item) => item.id === payload.notificationId
+      );
+      if (notification && notification.data) {
+        notification.data.selectedEmployees = payload.employees;
       }
     },
   },

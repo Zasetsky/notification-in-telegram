@@ -28,6 +28,7 @@ export interface Button {
 
 export interface NotificationData {
   employees: Employee[];
+  selectedEmployees: Employee[];
   buttons: Button[];
 }
 
