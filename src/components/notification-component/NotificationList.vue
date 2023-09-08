@@ -6,7 +6,7 @@
     >
     <AddNotificationDialog
       :visible="isDialogVisible"
-      :notifictationId="'1'"
+      :notificationId="'1'"
       @close="isDialogVisible = false"
     />
   </div>

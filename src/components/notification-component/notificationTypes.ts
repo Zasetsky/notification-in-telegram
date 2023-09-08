@@ -20,7 +20,7 @@ export interface ChandgeResponsible {
 export interface Button {
   id: string;
   inputValue: string;
-  cascaderValue1: CascaderOption | null;
+  cascaderValue: CascaderOption | null;
   linkValue: string;
   delete_message: boolean;
   change_responsible: ChandgeResponsible;

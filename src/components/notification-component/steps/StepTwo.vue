@@ -12,7 +12,7 @@
         />
       </el-select>
     </div>
-    <ButtonsCard />
+    <ButtonsCard :notificationId="notificationId" />
   </div>
 </template>
 
@@ -33,6 +33,13 @@ export default defineComponent({
     ElSelect,
     ElOption,
     ButtonsCard,
+  },
+
+  props: {
+    notificationId: {
+      type: String,
+      required: true,
+    },
   },
 
   setup() {

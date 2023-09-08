@@ -12,7 +12,7 @@
         :label="`Кнопка ${item.id}`"
         :name="item.id"
       >
-        <ButtonContent :buttonId="item.id" />
+        <ButtonContent :buttonId="item.id" :notificationId="notificationId" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -35,8 +35,17 @@ export default defineComponent({
     ButtonContent,
   },
 
-  setup() {
-    const { ActiveButtonTab, buttons, handleTabsEdit } = useButtonsCard();
+  props: {
+    notificationId: {
+      type: String,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    const { ActiveButtonTab, buttons, handleTabsEdit } = useButtonsCard(
+      props.notificationId
+    );
 
     return {
       ActiveButtonTab,

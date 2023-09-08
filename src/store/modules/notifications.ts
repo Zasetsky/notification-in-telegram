@@ -21,7 +21,7 @@ const notifications: Module<NotificationState, RootState> = {
             {
               id: "1",
               inputValue: "",
-              cascaderValue1: null,
+              cascaderValue: null,
               linkValue: "",
               delete_message: false,
               change_responsible: {
@@ -77,7 +77,7 @@ const notifications: Module<NotificationState, RootState> = {
       const button = notification.data.buttons.find(
         (button) => button.id === buttonId
       );
-      return button ? button.cascaderValue1 : null;
+      return button ? button.cascaderValue : null;
     },
 
     getCascaderOptions: (state) => state.cascaderOptions1,
@@ -108,7 +108,9 @@ const notifications: Module<NotificationState, RootState> = {
 
   mutations: {
     addInitialNotifications: (state, notifications) => {
-      state.notificationItem = notifications;
+      if (notifications && notifications.length > 0) {
+        state.notificationItem = notifications;
+      }
     },
 
     updateInputValue: (
@@ -154,7 +156,7 @@ const notifications: Module<NotificationState, RootState> = {
       const button = notification.data.buttons.find(
         (button) => button.id === payload.id
       );
-      if (button) button.cascaderValue1 = payload.value;
+      if (button) button.cascaderValue = payload.value;
     },
 
     setCascaderOptions: (state, options: CascaderOption[]) => {
@@ -165,7 +167,17 @@ const notifications: Module<NotificationState, RootState> = {
       const notification = state.notificationItem.find(
         (item) => item.id === notificationId
       );
-      if (!notification) return;
+      if (!notification) {
+        console.error(`Notification with id ${notificationId} not found`);
+        return;
+      }
+
+      if (!notification.data || !notification.data.buttons) {
+        console.error(
+          `Data or buttons missing in notification with id ${notificationId}`
+        );
+        return;
+      }
 
       const maxId = Math.max(
         ...notification.data.buttons.map((button) => parseInt(button.id, 10)),
@@ -175,7 +187,7 @@ const notifications: Module<NotificationState, RootState> = {
       notification.data.buttons.push({
         id: newId,
         inputValue: "",
-        cascaderValue1: null,
+        cascaderValue: null,
         linkValue: "",
         delete_message: false,
         change_responsible: {
@@ -249,6 +261,7 @@ const notifications: Module<NotificationState, RootState> = {
         .get("http://localhost:3000/get-initial-notifications") // Заменить на нужный адрес!!!
         .then((response) => {
           commit("addInitialNotifications", response.data);
+          console.log(response.data);
         })
         .catch((error) => {
           console.error("Ошибка при получении кнопок:", error);
@@ -276,15 +289,20 @@ const notifications: Module<NotificationState, RootState> = {
     handleTabsEdit: (
       { commit },
       {
+        notificationId,
         paneName,
         action,
-      }: { paneName: string | undefined; action: "add" | "remove" }
+      }: {
+        notificationId: string;
+        paneName: string | undefined;
+        action: "add" | "remove";
+      }
     ) => {
       if (action === "remove" && paneName) {
-        commit("removeButton", paneName);
+        commit("removeButton", { notificationId, id: paneName });
       }
       if (action === "add") {
-        commit("addButton");
+        commit("addButton", notificationId);
       }
     },
   },

@@ -1,7 +1,7 @@
 import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 
-export function useButtonContent(buttonId: string) {
+export function useButtonContent(buttonId: string, notificationId: string) {
   const store = useStore();
 
   const cascaderOptions = computed(
@@ -9,21 +9,33 @@ export function useButtonContent(buttonId: string) {
   );
 
   const inputValueModel = computed({
-    get: () => store.getters["notifications/getInputValue"](buttonId),
+    get: () =>
+      store.getters["notifications/getInputValue"](notificationId, buttonId),
     set: (value: string) =>
-      store.commit("notifications/updateInputValue", { id: buttonId, value }),
+      store.commit("notifications/updateInputValue", {
+        notificationId,
+        id: buttonId,
+        value,
+      }),
   });
 
   const linkValueModel = computed({
-    get: () => store.getters["notifications/getLinkValue"](buttonId),
+    get: () =>
+      store.getters["notifications/getLinkValue"](notificationId, buttonId),
     set: (value: string) =>
-      store.commit("notifications/updateLinkValue", { id: buttonId, value }),
+      store.commit("notifications/updateLinkValue", {
+        notificationId,
+        id: buttonId,
+        value,
+      }),
   });
 
   const cascaderValueModel = computed({
-    get: () => store.getters["notifications/getCascaderValue"](buttonId),
+    get: () =>
+      store.getters["notifications/getCascaderValue"](notificationId, buttonId),
     set: (value: string) =>
       store.commit("notifications/updateCascaderValue", {
+        notificationId,
         id: buttonId,
         value,
       }),
@@ -36,9 +48,13 @@ export function useButtonContent(buttonId: string) {
 
   const changeResponsibleDeal = computed({
     get: () =>
-      store.getters["notifications/getChangeResponsible"](buttonId).deal,
+      store.getters["notifications/getChangeResponsible"](
+        notificationId,
+        buttonId
+      ).deal,
     set: (value: boolean) =>
       store.commit("notifications/updateChangeResponsibleField", {
+        notificationId,
         id: buttonId,
         field: "deal",
         value,
@@ -47,9 +63,13 @@ export function useButtonContent(buttonId: string) {
 
   const changeResponsibleTask = computed({
     get: () =>
-      store.getters["notifications/getChangeResponsible"](buttonId).task,
+      store.getters["notifications/getChangeResponsible"](
+        notificationId,
+        buttonId
+      ).task,
     set: (value: boolean) =>
       store.commit("notifications/updateChangeResponsibleField", {
+        notificationId,
         id: buttonId,
         field: "task",
         value,
@@ -58,9 +78,13 @@ export function useButtonContent(buttonId: string) {
 
   const changeResponsibleCompany = computed({
     get: () =>
-      store.getters["notifications/getChangeResponsible"](buttonId).company,
+      store.getters["notifications/getChangeResponsible"](
+        notificationId,
+        buttonId
+      ).company,
     set: (value: boolean) =>
       store.commit("notifications/updateChangeResponsibleField", {
+        notificationId,
         id: buttonId,
         field: "company",
         value,
@@ -68,9 +92,11 @@ export function useButtonContent(buttonId: string) {
   });
 
   const deleteMessage = computed({
-    get: () => store.getters["notifications/getDeleteMessage"](buttonId),
+    get: () =>
+      store.getters["notifications/getDeleteMessage"](notificationId, buttonId),
     set: (value: boolean) =>
       store.commit("notifications/updateDeleteMessage", {
+        notificationId,
         id: buttonId,
         value,
       }),

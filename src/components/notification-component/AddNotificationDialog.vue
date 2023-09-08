@@ -11,8 +11,12 @@
       <el-step title="Шаг 2"></el-step>
     </el-steps>
 
-    <StepOne v-if="activeStep === 0" @next="nextStep" />
-    <StepTwo v-if="activeStep === 1" />
+    <StepOne
+      v-if="activeStep === 0"
+      @next="nextStep"
+      :notificationId="notificationId"
+    />
+    <StepTwo v-if="activeStep === 1" :notificationId="notificationId" />
     <div class="notification-dialog__button-wrapper">
       <el-button>Отмена</el-button>
       <el-button>Назад</el-button>
@@ -40,6 +44,11 @@ export default defineComponent({
   props: {
     visible: {
       type: Boolean,
+      required: true,
+    },
+
+    notificationId: {
+      type: String,
       required: true,
     },
   },

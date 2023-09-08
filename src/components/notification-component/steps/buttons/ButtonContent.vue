@@ -55,6 +55,11 @@ export default defineComponent({
       type: String,
       required: true,
     },
+
+    notificationId: {
+      type: String,
+      required: true,
+    },
   },
 
   setup(props) {
@@ -68,7 +73,7 @@ export default defineComponent({
       changeResponsibleTask,
       changeResponsibleCompany,
       deleteMessage,
-    } = useButtonContent(props.buttonId);
+    } = useButtonContent(props.buttonId, props.notificationId);
 
     return {
       inputValueModel,
