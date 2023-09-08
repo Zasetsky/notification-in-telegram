@@ -9,25 +9,27 @@
       <p>Выберите сотрудников, которые будут получать оповещения</p>
 
       <el-transfer
-        v-model="value"
+        v-model="selectedEmployeeIds"
         filterable
         :filter-method="filterMethod"
         filter-placeholder="State Abbreviations"
-        :data="data"
+        :data="transformedEmployees"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, computed, ref, watch, onMounted } from "vue";
+import { useStore } from "vuex";
 import { ElTransfer, ElInput } from "element-plus";
+import { Employee } from "../notificationTypes";
 
 import "element-plus/es/components/button/style/css";
 import "element-plus/es/components/transfer/style/css";
 import "element-plus/es/components/input/style/css";
 
-interface Option {
+interface TransferEmployee {
   key: number;
   label: string;
   initial: string;
@@ -39,32 +41,50 @@ export default defineComponent({
     ElInput,
   },
 
-  setup(_, { emit }) {
-    const value = ref([]);
+  props: {
+    notificationId: {
+      type: String,
+      required: true,
+    },
+  },
 
-    const generateData = () => {
-      const data: Option[] = [];
-      const states = [
-        "California",
-        "Illinois",
-        "Maryland",
-        "Texas",
-        "Florida",
-        "Colorado",
-        "Connecticut ",
-      ];
-      const initials = ["CA", "IL", "MD", "TX", "FL", "CO", "CT"];
-      states.forEach((city, index) => {
-        data.push({
-          label: city,
-          key: index,
-          initial: initials[index],
-        });
+  setup(props, { emit }) {
+    const store = useStore();
+    const allEmployees = computed(() =>
+      store.getters["notifications/getEmployees"](props.notificationId)
+    );
+
+    const selectedEmployeeIds = ref<number[]>([]);
+
+    const transformedEmployees = computed<TransferEmployee[]>(() => {
+      return allEmployees.value.map((emp: Employee) => {
+        return {
+          key: emp.id,
+          label: emp.name,
+          initial: emp.initial,
+        };
       });
-      return data;
-    };
+    });
 
-    const data = ref<Option[]>(generateData());
+    watch(selectedEmployeeIds, (newVal) => {
+      const selectedEmployees = allEmployees.value.filter((emp: Employee) =>
+        newVal.includes(emp.id)
+      );
+      store.commit("notifications/setEmployees", {
+        notificationId: props.notificationId,
+        employees: selectedEmployees,
+      });
+    });
+
+    const filterMethod = (
+      query: string,
+      item: Record<string, any>
+    ): boolean => {
+      if (typeof item.label === "string") {
+        return item.label.toLowerCase().includes(query.toLowerCase());
+      }
+      return false;
+    };
 
     const goToNextStep = () => {
       emit("next");
@@ -74,17 +94,21 @@ export default defineComponent({
       emit("previous");
     };
 
-    const filterMethod = (query: any, item: any) => {
-      return item.initial.toLowerCase().includes(query.toLowerCase());
-    };
+    onMounted(() => {
+      store
+        .dispatch("notifications/fetchEmployees", props.notificationId)
+        .then(() => {
+          console.log("Данные сотрудников:", allEmployees.value);
+          console.log("Преобразованные данные:", transformedEmployees.value);
+        });
+    });
 
     return {
-      value,
-      data,
+      transformedEmployees,
+      selectedEmployeeIds,
       goToNextStep,
       goToPreviousStep,
       filterMethod,
-      generateData,
     };
   },
 });

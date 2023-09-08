@@ -5,11 +5,22 @@
   margin-top: 5vh;
 
   &__button-wrapper {
-    .next-btn {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--el-fill-color-light);
+    padding: 20px;
+
+    .btn {
+      color: var(--el-color-primary);
+      border: 1px solid var(--el-color-primary-light-5);
+      background: var(--el-color-primary-light-9);
+      padding: 18px;
+    }
+
+    .fill-btn {
       background-color: var(--el-color-primary);
       color: var(--el-text-color-overlay);
-      width: 94px;
-      height: 40px;
+      padding: 18px;
     }
   }
 

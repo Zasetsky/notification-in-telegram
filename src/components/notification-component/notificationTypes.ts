@@ -1,6 +1,7 @@
 export interface Employee {
   id: number;
   name: string;
+  initial: string;
 }
 
 export interface CascaderOption {
@@ -26,7 +27,7 @@ export interface Button {
 }
 
 export interface NotificationData {
-  employee: Employee[];
+  employees: Employee[];
   buttons: Button[];
 }
 

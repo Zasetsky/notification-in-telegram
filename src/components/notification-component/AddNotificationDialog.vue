@@ -18,12 +18,16 @@
     />
     <StepTwo v-if="activeStep === 1" :notificationId="notificationId" />
     <div class="notification-dialog__button-wrapper">
-      <el-button>Отмена</el-button>
-      <el-button>Назад</el-button>
-      <el-button class="next-btn" @click="nextStep"
+      <el-button class="btn" @click="cancelDialog">Отмена</el-button>
+      <el-button v-if="activeStep === 0" class="fill-btn" @click="nextStep"
         >Далее <chevron_icon
       /></el-button>
-      <el-button>Создать оповещение</el-button>
+      <div v-if="activeStep === 1">
+        <el-button class="btn" @click="prevStep"
+          ><chevron_back_icon />Назад</el-button
+        >
+        <el-button class="fill-btn">Создать оповещение</el-button>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -33,7 +37,7 @@ import { defineComponent, ref, watch } from "vue";
 import StepOne from "./steps/StepOne.vue";
 import StepTwo from "./steps/StepTwo.vue";
 import { ElDialog, ElSteps, ElStep, ElButton } from "element-plus";
-import { chevron_icon } from "@/assets/icons/index";
+import { chevron_icon, chevron_back_icon } from "@/assets/icons/index";
 
 import "element-plus/es/components/dialog/style/css";
 import "element-plus/es/components/steps/style/css";
@@ -60,6 +64,7 @@ export default defineComponent({
     ElStep,
     ElButton,
     chevron_icon,
+    chevron_back_icon,
   },
   setup(props, { emit }) {
     const activeStep = ref(0);
@@ -68,7 +73,6 @@ export default defineComponent({
     watch(
       () => props.visible,
       (newValue) => {
-        console.log("Watch triggered, new value: ", newValue);
         isDialogVisible.value = newValue;
       }
     );
@@ -77,15 +81,28 @@ export default defineComponent({
       emit("close");
     };
 
+    const cancelDialog = () => {
+      activeStep.value = 0;
+      closeDialog();
+    };
+
     const nextStep = () => {
       activeStep.value++;
+    };
+
+    const prevStep = () => {
+      if (activeStep.value > 0) {
+        activeStep.value--;
+      }
     };
 
     return {
       isDialogVisible,
       activeStep,
       closeDialog,
+      cancelDialog,
       nextStep,
+      prevStep,
     };
   },
 });

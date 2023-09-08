@@ -30,7 +30,6 @@ export default defineComponent({
     const isDialogVisible = ref(false);
 
     const showAddNotificationDialog = () => {
-      console.log("Button clicked");
       isDialogVisible.value = true;
     };
 

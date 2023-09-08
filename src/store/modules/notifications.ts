@@ -4,6 +4,7 @@ import {
   CascaderOption,
   ChandgeResponsible,
   Button,
+  Employee,
 } from "@/components/notification-component/notificationTypes";
 import { RootState } from "../storeTypes";
 import axios from "axios";
@@ -16,7 +17,7 @@ const notifications: Module<NotificationState, RootState> = {
         id: "1",
         name: "",
         data: {
-          employee: [],
+          employees: [],
           buttons: [
             {
               id: "1",
@@ -104,6 +105,15 @@ const notifications: Module<NotificationState, RootState> = {
       );
       return button ? button.delete_message : null;
     },
+
+    getEmployees:
+      (state) =>
+      (notificationId: string): Employee[] => {
+        const notification = state.notificationItem.find(
+          (item) => item.id === notificationId
+        );
+        return notification ? notification.data.employees : [];
+      },
   },
 
   mutations: {
@@ -253,6 +263,18 @@ const notifications: Module<NotificationState, RootState> = {
       );
       if (button) button.delete_message = payload.value;
     },
+
+    setEmployees(
+      state,
+      payload: { notificationId: string; employees: Employee[] }
+    ) {
+      const notification = state.notificationItem.find(
+        (item) => item.id === payload.notificationId
+      );
+      if (notification && notification.data) {
+        notification.data.employees = payload.employees;
+      }
+    },
   },
 
   actions: {
@@ -261,7 +283,6 @@ const notifications: Module<NotificationState, RootState> = {
         .get("http://localhost:3000/get-initial-notifications") // Заменить на нужный адрес!!!
         .then((response) => {
           commit("addInitialNotifications", response.data);
-          console.log(response.data);
         })
         .catch((error) => {
           console.error("Ошибка при получении кнопок:", error);
@@ -303,6 +324,23 @@ const notifications: Module<NotificationState, RootState> = {
       }
       if (action === "add") {
         commit("addButton", notificationId);
+      }
+    },
+
+    async fetchEmployees({ commit }, notificationId: string) {
+      try {
+        const response = await axios.get<Employee[]>(
+          "http://localhost:3000/get-employees"
+        );
+
+        commit("setEmployees", {
+          notificationId,
+          employees: response.data,
+        });
+
+        console.log("Сервер вернул:", response.data);
+      } catch (error) {
+        console.error("Ошибка при получении данных о сотрудниках:", error);
       }
     },
   },
