@@ -34,4 +34,4 @@ export function renderApp(
 }
 
 // Инициализация с пропсами (Это только для тестов)
-renderApp("#app", { accountId: 0, appName: "Test" });
+renderApp("#app", { accountId: 19769626, appName: "rkrs_autoname_lead" });

@@ -21,8 +21,6 @@
       <variables-picker
         @past="(v: string) => insertVariable(v)"
         :show="variablesPickerShow"
-        :account-id="19769626"
-        :app-name="'rkrs_autoname_lead'"
       />
     </div>
   </div>

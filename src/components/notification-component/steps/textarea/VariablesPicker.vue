@@ -86,8 +86,6 @@ export default defineComponent({
   },
   props: {
     show: Boolean,
-    accountId: [String, Number],
-    appName: String,
   },
   setup(props, { emit }) {
     const {

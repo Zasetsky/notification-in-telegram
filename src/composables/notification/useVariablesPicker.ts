@@ -14,8 +14,6 @@ interface ModifyOption {
 
 interface PropsType {
   show: boolean;
-  accountId?: string | number;
-  appName?: string;
 }
 
 interface EmitType {
@@ -50,10 +48,7 @@ export default function useVariablesPicker(props: PropsType, emit: EmitType) {
   const getData = async () => {
     loading.value = true;
     try {
-      const res = await axios.post("https://ssd.rkrs.ru/widget/get/var", {
-        accountId: props.accountId,
-        appName: props.appName,
-      });
+      const res = await axios.post("https://ssd.rkrs.ru/widget/get/var");
       data.value = res.data.data;
       modifyOptions.value = res.data.modify;
     } finally {
