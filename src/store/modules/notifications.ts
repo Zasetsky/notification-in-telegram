@@ -5,6 +5,7 @@ import {
   ChandgeResponsible,
   Button,
   Employee,
+  Bot,
 } from "@/components/notification-component/notificationTypes";
 import { RootState } from "../storeTypes";
 import axios from "axios";
@@ -17,8 +18,13 @@ const notifications: Module<NotificationState, RootState> = {
         id: "1",
         name: "",
         data: {
-          notificationText: "",
           selectedEmployees: [],
+          notificationText: "",
+          selectedBot: {
+            label: "",
+            value: "",
+            token: "",
+          },
           buttons: [
             {
               id: "1",
@@ -119,6 +125,15 @@ const notifications: Module<NotificationState, RootState> = {
     getNotification: (state) => (notificationId: string) => {
       return state.notificationItem.find((item) => item.id === notificationId);
     },
+
+    getSelectedBot:
+      (state) =>
+      (notificationId: string): Bot | null => {
+        const notification = state.notificationItem.find(
+          (item) => item.id === notificationId
+        );
+        return notification ? notification.data.selectedBot : null;
+      },
   },
 
   mutations: {
@@ -302,6 +317,18 @@ const notifications: Module<NotificationState, RootState> = {
       );
       if (notification) {
         notification.data.notificationText = payload.text;
+      }
+    },
+
+    updateSelectedBot: (
+      state,
+      payload: { notificationId: string; bot: Bot }
+    ) => {
+      const notification = state.notificationItem.find(
+        (item) => item.id === payload.notificationId
+      );
+      if (notification) {
+        notification.data.selectedBot = payload.bot;
       }
     },
   },

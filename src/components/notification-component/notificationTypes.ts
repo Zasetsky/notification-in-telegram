@@ -4,6 +4,12 @@ export interface Employee {
   initial: string;
 }
 
+export interface Bot {
+  label: string;
+  value: string;
+  token: string;
+}
+
 export interface CascaderOption {
   value: string;
   label: string;
@@ -27,8 +33,9 @@ export interface Button {
 }
 
 export interface NotificationData {
-  notificationText: string;
   selectedEmployees: Employee[];
+  notificationText: string;
+  selectedBot: Bot;
   buttons: Button[];
 }
 

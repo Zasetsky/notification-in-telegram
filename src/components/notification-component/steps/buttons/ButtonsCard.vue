@@ -71,6 +71,7 @@ export default defineComponent({
     border-radius: 4px;
     border: 1px solid var(--el-color-primary-light-7);
     background-color: var(--el-color-primary-light-9);
+
     .el-icon {
       color: var(--el-color-primary);
     }

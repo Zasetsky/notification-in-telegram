@@ -10,10 +10,6 @@ const bots: Module<StateBot, RootState> = {
   namespaced: true,
   state: {
     availableBots: [],
-    selectedBot: {
-      label: "",
-      value: "",
-    },
   },
   getters: {
     getAvailableBots: (state): Bot[] => state.availableBots,
@@ -24,7 +20,7 @@ const bots: Module<StateBot, RootState> = {
   actions: {
     fetchAvailableBots({ commit }) {
       axios
-        .get("http://localhost:3000/get-bots") // Сменить на нужный сервер!!!
+        .get("http://localhost:3000/get-telegram-bots") // Сменить на нужный сервер!!!
         .then((response) => {
           commit("setAvailableBots", response.data);
         })

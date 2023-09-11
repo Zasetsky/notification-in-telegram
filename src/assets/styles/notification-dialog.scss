@@ -52,9 +52,14 @@
     }
   }
 
-  .el-dialog__headerbtn:focus .el-dialog__close,
-  .el-dialog__headerbtn:hover .el-dialog__close {
-    color: var(--el-color-primary-light-9);
+  .el-dialog__headerbtn .el-dialog__close,
+  .el-dialog__headerbtn .el-dialog__close {
+    color: var(--el-color-primary-light-5);
+
+    &:focus,
+    :hover {
+      color: var(--el-color-primary-light-9);
+    }
   }
 
   .el-dialog__body {
