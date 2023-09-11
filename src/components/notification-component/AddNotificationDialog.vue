@@ -31,7 +31,9 @@
         >
           <chevron_back_icon :hover="hover" />Назад
         </el-button>
-        <el-button class="fill-btn">Создать оповещение</el-button>
+        <el-button class="fill-btn" @click="saveNotification"
+          >Создать оповещение</el-button
+        >
       </div>
     </div>
   </el-dialog>
@@ -41,6 +43,8 @@
 import { defineComponent, ref, watch } from "vue";
 import StepOne from "./steps/StepOne.vue";
 import StepTwo from "./steps/StepTwo.vue";
+import { useStore } from "vuex";
+
 import { ElDialog, ElSteps, ElStep, ElButton } from "element-plus";
 import { chevron_icon, chevron_back_icon } from "@/assets/icons/index";
 
@@ -72,6 +76,7 @@ export default defineComponent({
     chevron_back_icon,
   },
   setup(props, { emit }) {
+    const store = useStore();
     const activeStep = ref(0);
     const isDialogVisible = ref(props.visible);
     const hover = ref(false);
@@ -82,6 +87,12 @@ export default defineComponent({
         isDialogVisible.value = newValue;
       }
     );
+
+    const saveNotification = () => {
+      store.dispatch("notifications/saveNotificationItem");
+      activeStep.value = 0;
+      emit("close");
+    };
 
     const closeDialog = () => {
       emit("close");
@@ -111,6 +122,7 @@ export default defineComponent({
       cancelDialog,
       nextStep,
       prevStep,
+      saveNotification,
     };
   },
 });
