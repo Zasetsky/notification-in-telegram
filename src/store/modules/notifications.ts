@@ -17,7 +17,7 @@ const notifications: Module<NotificationState, RootState> = {
         id: "1",
         name: "",
         data: {
-          employees: [],
+          notificationText: "",
           selectedEmployees: [],
           buttons: [
             {
@@ -107,15 +107,6 @@ const notifications: Module<NotificationState, RootState> = {
       return button ? button.delete_message : null;
     },
 
-    getEmployees:
-      (state) =>
-      (notificationId: string): Employee[] => {
-        const notification = state.notificationItem.find(
-          (item) => item.id === notificationId
-        );
-        return notification ? notification.data.employees : [];
-      },
-
     getSelectedEmployees:
       (state) =>
       (notificationId: string): Employee[] => {
@@ -124,6 +115,10 @@ const notifications: Module<NotificationState, RootState> = {
         );
         return notification ? notification.data.selectedEmployees : [];
       },
+
+    getNotification: (state) => (notificationId: string) => {
+      return state.notificationItem.find((item) => item.id === notificationId);
+    },
   },
 
   mutations: {
@@ -274,18 +269,6 @@ const notifications: Module<NotificationState, RootState> = {
       if (button) button.delete_message = payload.value;
     },
 
-    setEmployees(
-      state,
-      payload: { notificationId: string; employees: Employee[] }
-    ) {
-      const notification = state.notificationItem.find(
-        (item) => item.id === payload.notificationId
-      );
-      if (notification && notification.data) {
-        notification.data.employees = payload.employees;
-      }
-    },
-
     setSelectedEmployees(
       state,
       payload: { notificationId: string; employees: Employee[] }
@@ -297,12 +280,36 @@ const notifications: Module<NotificationState, RootState> = {
         notification.data.selectedEmployees = payload.employees;
       }
     },
+
+    updateNotificationName: (
+      state,
+      payload: { notificationId: string; name: string }
+    ) => {
+      const notification = state.notificationItem.find(
+        (item) => item.id === payload.notificationId
+      );
+      if (notification) {
+        notification.name = payload.name;
+      }
+    },
+
+    updateNotificationText: (
+      state,
+      payload: { notificationId: string; text: string }
+    ) => {
+      const notification = state.notificationItem.find(
+        (item) => item.id === payload.notificationId
+      );
+      if (notification) {
+        notification.data.notificationText = payload.text;
+      }
+    },
   },
 
   actions: {
     fetchInitialNotifications({ commit }) {
       axios
-        .get("http://localhost:3000/get-initial-notifications") // Заменить на нужный адрес!!!
+        .get<Notification[]>("http://localhost:3000/get-initial-notifications") // Заменить на нужный адрес!!!
         .then((response) => {
           commit("addInitialNotifications", response.data);
         })
@@ -346,23 +353,6 @@ const notifications: Module<NotificationState, RootState> = {
       }
       if (action === "add") {
         commit("addButton", notificationId);
-      }
-    },
-
-    async fetchEmployees({ commit }, notificationId: string) {
-      try {
-        const response = await axios.get<Employee[]>(
-          "http://localhost:3000/get-employees"
-        );
-
-        commit("setEmployees", {
-          notificationId,
-          employees: response.data,
-        });
-
-        console.log("Сервер вернул:", response.data);
-      } catch (error) {
-        console.error("Ошибка при получении данных о сотрудниках:", error);
       }
     },
   },

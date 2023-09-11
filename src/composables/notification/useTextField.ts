@@ -1,9 +1,24 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
 
-export default function useTextField() {
-  const text = ref<string>("");
+export default function useTextField(notificationId: string) {
+  const store = useStore();
   const variablesPickerShow = ref<boolean>(false);
   const massageInputRef = ref<HTMLTextAreaElement | null>(null);
+
+  const notificationText = computed({
+    get: () => {
+      const notification =
+        store.getters["notifications/getNotification"](notificationId);
+      return notification ? notification.data.notificationText : "";
+    },
+    set: (newText) => {
+      store.commit("notifications/updateNotificationText", {
+        notificationId,
+        text: newText,
+      });
+    },
+  });
 
   const currentInput = (): HTMLTextAreaElement | null => {
     if (massageInputRef.value) {
@@ -50,7 +65,7 @@ export default function useTextField() {
       textArea.selectionStart + openTag.length + selectedText.length
     );
 
-    text.value = textArea.value;
+    notificationText.value = textArea.value;
   };
 
   const insertVariable = (variable: string) => {
@@ -63,7 +78,7 @@ export default function useTextField() {
       textArea.selectionStart + variable.length
     );
 
-    text.value = textArea.value;
+    notificationText.value = textArea.value;
   };
 
   const toggleVariablesPicker = () => {
@@ -71,7 +86,7 @@ export default function useTextField() {
   };
 
   return {
-    text,
+    text: notificationText,
     variablesPickerShow,
     massageInputRef,
     toggleVariablesPicker,

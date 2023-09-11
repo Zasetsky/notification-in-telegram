@@ -1,6 +1,6 @@
 <template>
   <div class="step-two">
-    <TextField />
+    <TextField :notificationId="notificationId" />
     <div class="step-two__select-wrapper">
       <p>Использовать бота</p>
       <el-select v-model="selectedBot" placeholder="Выберите бота">

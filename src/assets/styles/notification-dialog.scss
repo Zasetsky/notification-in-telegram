@@ -13,14 +13,23 @@
     .btn {
       color: var(--el-color-primary);
       border: 1px solid var(--el-color-primary-light-5);
-      background: var(--el-color-primary-light-9);
+      background-color: var(--el-color-primary-light-9);
       padding: 18px;
+
+      &:hover {
+        background-color: var(--el-color-primary) !important;
+        color: var(--el-color-white);
+      }
     }
 
     .fill-btn {
       background-color: var(--el-color-primary);
       color: var(--el-text-color-overlay);
       padding: 18px;
+
+      &:hover {
+        background-color: var(--el-color-primary-dark-2);
+      }
     }
   }
 
@@ -37,8 +46,10 @@
     color: var(--el-text-color-overlay);
   }
 
-  .el-icon {
-    color: var(--el-color-primary-light-5);
+  .el-transfer-panel__filter {
+    .el-icon {
+      color: var(--el-color-primary-light-5);
+    }
   }
 
   .el-dialog__headerbtn:focus .el-dialog__close,

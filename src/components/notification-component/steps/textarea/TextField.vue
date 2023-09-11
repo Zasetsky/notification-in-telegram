@@ -44,7 +44,15 @@ export default defineComponent({
     ElInput,
     TextFieldTools,
   },
-  setup() {
+
+  props: {
+    notificationId: {
+      type: String,
+      required: true,
+    },
+  },
+
+  setup(props) {
     const {
       text,
       variablesPickerShow,
@@ -52,7 +60,7 @@ export default defineComponent({
       toggleVariablesPicker,
       pushBBCodeCustom,
       insertVariable,
-    } = useTextField();
+    } = useTextField(props.notificationId);
 
     return {
       text,

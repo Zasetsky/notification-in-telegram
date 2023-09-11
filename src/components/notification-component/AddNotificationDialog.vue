@@ -23,9 +23,14 @@
         >Далее <chevron_icon
       /></el-button>
       <div v-if="activeStep === 1">
-        <el-button class="btn" @click="prevStep"
-          ><chevron_back_icon />Назад</el-button
+        <el-button
+          class="btn"
+          @click="prevStep"
+          @mouseenter="hover = true"
+          @mouseleave="hover = false"
         >
+          <chevron_back_icon :hover="hover" />Назад
+        </el-button>
         <el-button class="fill-btn">Создать оповещение</el-button>
       </div>
     </div>
@@ -69,6 +74,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const activeStep = ref(0);
     const isDialogVisible = ref(props.visible);
+    const hover = ref(false);
 
     watch(
       () => props.visible,
@@ -93,12 +99,14 @@ export default defineComponent({
     const prevStep = () => {
       if (activeStep.value > 0) {
         activeStep.value--;
+        hover.value = false;
       }
     };
 
     return {
       isDialogVisible,
       activeStep,
+      hover,
       closeDialog,
       cancelDialog,
       nextStep,

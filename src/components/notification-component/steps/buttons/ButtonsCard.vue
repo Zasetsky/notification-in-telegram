@@ -67,12 +67,21 @@ export default defineComponent({
     border-top: none;
   }
 
-  .el-tabs__new-tab:hover {
-    color: var(--el-color-white);
-    background-color: var(--el-color-primary);
-
+  .el-tabs__new-tab {
+    border-radius: 4px;
+    border: 1px solid var(--el-color-primary-light-7);
+    background-color: var(--el-color-primary-light-9);
     .el-icon {
+      color: var(--el-color-primary);
+    }
+
+    &:hover {
       color: var(--el-color-white);
+      background-color: var(--el-color-primary);
+
+      .el-icon {
+        color: var(--el-color-white);
+      }
     }
   }
 }
