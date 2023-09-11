@@ -382,6 +382,24 @@ const notifications: Module<NotificationState, RootState> = {
         commit("addButton", notificationId);
       }
     },
+
+    async saveNotificationItem({ state }) {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/save-notification",
+          {
+            notificationItem: state.notificationItem,
+          }
+        );
+        if (response.status === 200) {
+          console.log("Успешно сохранено!");
+        } else {
+          console.log("Ошибка при сохранении:", response.status);
+        }
+      } catch (error) {
+        console.error("Ошибка при сохранении:", error);
+      }
+    },
   },
 };
 
