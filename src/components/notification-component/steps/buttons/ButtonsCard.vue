@@ -19,11 +19,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { ElTabs, ElTabPane } from "element-plus";
+import { defineComponent, PropType } from "vue";
 import ButtonContent from "./ButtonContent.vue";
 import { useButtonsCard } from "@/composables/notification/useButtonsCard";
+import { Button } from "../../notificationTypes";
 
+import { ElTabs, ElTabPane } from "element-plus";
 import "element-plus/es/components/tabs/style/css";
 import "element-plus/es/components/tab-pane/style/css";
 import "element-plus/es/components/button/style/css";
@@ -40,16 +41,20 @@ export default defineComponent({
       type: String,
       required: true,
     },
+
+    buttons: {
+      type: Array as PropType<Button[]>,
+      required: true,
+    },
   },
 
   setup(props) {
-    const { ActiveButtonTab, buttons, handleTabsEdit } = useButtonsCard(
+    const { ActiveButtonTab, handleTabsEdit } = useButtonsCard(
       props.notificationId
     );
 
     return {
       ActiveButtonTab,
-      buttons,
       handleTabsEdit,
     };
   },

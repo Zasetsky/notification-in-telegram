@@ -17,7 +17,7 @@
       padding: 18px;
 
       &:hover {
-        background-color: var(--el-color-primary) !important;
+        background-color: var(--el-color-primary);
         color: var(--el-color-white);
       }
     }
@@ -28,7 +28,8 @@
       padding: 18px;
 
       &:hover {
-        background-color: var(--el-color-primary-dark-2);
+        background: var(--el-color-primary-light-3);
+        color: var(--el-color-white);
       }
     }
   }

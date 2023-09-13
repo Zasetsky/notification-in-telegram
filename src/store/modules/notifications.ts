@@ -10,38 +10,23 @@ import {
 import { RootState } from "../storeTypes";
 import axios from "axios";
 
+export function generateNewId(
+  notificationItems: Array<{ id: string }>
+): string {
+  // Извлечь все текущие ID и преобразовать их в числа
+  const currentIds = notificationItems.map((item) => parseInt(item.id, 10));
+  // Найти максимальный ID
+  const maxId = Math.max(...currentIds, 0);
+  // Генерировать новый ID, увеличивая максимальный на 1
+  const newId = maxId + 1;
+  // Преобразовать новый ID обратно в строку
+  return newId.toString();
+}
+
 const notifications: Module<NotificationState, RootState> = {
   namespaced: true,
   state: {
-    notificationItem: [
-      {
-        id: "1",
-        name: "",
-        data: {
-          selectedEmployees: [],
-          notificationText: "",
-          selectedBot: {
-            label: "",
-            value: "",
-            token: "",
-          },
-          buttons: [
-            {
-              id: "1",
-              inputValue: "",
-              cascaderValue: null,
-              linkValue: "",
-              delete_message: false,
-              change_responsible: {
-                deal: false,
-                task: false,
-                company: false,
-              },
-            },
-          ],
-        },
-      },
-    ],
+    notificationItem: [],
     cascaderOptions1: [],
   },
 
@@ -143,6 +128,10 @@ const notifications: Module<NotificationState, RootState> = {
       }
     },
 
+    addNewNotification: (state, newNotification) => {
+      state.notificationItem.push(newNotification);
+    },
+
     updateInputValue: (
       state,
       payload: { notificationId: string; id: string; value: string }
@@ -198,14 +187,20 @@ const notifications: Module<NotificationState, RootState> = {
         (item) => item.id === notificationId
       );
       if (!notification) {
-        console.error(`Notification with id ${notificationId} not found`);
+        console.error(`Оповещение с id ${notificationId} не найдено`);
         return;
       }
 
       if (!notification.data || !notification.data.buttons) {
         console.error(
-          `Data or buttons missing in notification with id ${notificationId}`
+          `Данные или кнопки отсутствуют в оповещении с id ${notificationId}`
         );
+        return;
+      }
+
+      // Проверяем, не превышено ли максимальное количество кнопок
+      if (notification.data.buttons.length >= 5) {
+        console.error("Невозможно добавить более 5 кнопок");
         return;
       }
 
@@ -214,6 +209,13 @@ const notifications: Module<NotificationState, RootState> = {
         0
       );
       const newId = (maxId + 1).toString();
+
+      // Проверка, чтобы id не превышало 5
+      if (parseInt(newId, 10) > 5) {
+        console.error("ID не может быть больше 5");
+        return;
+      }
+
       notification.data.buttons.push({
         id: newId,
         inputValue: "",
@@ -331,6 +333,39 @@ const notifications: Module<NotificationState, RootState> = {
         notification.data.selectedBot = payload.bot;
       }
     },
+
+    copyNotification: (state, notificationId: string) => {
+      const originalNotification = state.notificationItem.find(
+        (item) => item.id === notificationId
+      );
+      if (originalNotification) {
+        const copiedNotification = JSON.parse(
+          JSON.stringify(originalNotification)
+        );
+        const newId = generateNewId(state.notificationItem); // Используем функцию для генерации нового ID
+        copiedNotification.id = newId;
+        copiedNotification.name = `${originalNotification.name} (Копия)`;
+        state.notificationItem.push(copiedNotification);
+      }
+    },
+
+    setNotificationSaved: (
+      state,
+      payload: { id: string; isSaved: boolean }
+    ) => {
+      const notification = state.notificationItem.find(
+        (item) => item.id === payload.id
+      );
+      if (notification) {
+        notification.isSaved = payload.isSaved;
+      }
+    },
+
+    removeNotification: (state, notificationId: string) => {
+      state.notificationItem = state.notificationItem.filter(
+        (item) => item.id !== notificationId
+      );
+    },
   },
 
   actions: {
@@ -341,7 +376,7 @@ const notifications: Module<NotificationState, RootState> = {
           commit("addInitialNotifications", response.data);
         })
         .catch((error) => {
-          console.error("Ошибка при получении кнопок:", error);
+          console.error("Ошибка при получении оповещений:", error);
         });
     },
 
@@ -383,14 +418,29 @@ const notifications: Module<NotificationState, RootState> = {
       }
     },
 
-    async saveNotificationItem({ state }) {
+    async saveNotificationItem({ commit, state }, notificationId: string) {
       try {
+        commit("setNotificationSaved", {
+          id: notificationId,
+          isSaved: true,
+        });
+
+        const updatedNotification = state.notificationItem.find(
+          (item) => item.id === notificationId
+        );
+
+        if (!updatedNotification) {
+          console.error("Уведомление с данным ID не найдено");
+          return;
+        }
+
         const response = await axios.post(
           "http://localhost:3000/save-notification",
           {
-            notificationItem: state.notificationItem,
+            notificationItem: updatedNotification,
           }
         );
+
         if (response.status === 200) {
           console.log("Успешно сохранено!");
         } else {
@@ -398,6 +448,46 @@ const notifications: Module<NotificationState, RootState> = {
         }
       } catch (error) {
         console.error("Ошибка при сохранении:", error);
+      }
+    },
+
+    async copyAndSaveNotification({ commit, state }, notificationId: string) {
+      commit("copyNotification", notificationId);
+      const copiedNotification =
+        state.notificationItem[state.notificationItem.length - 1];
+      if (copiedNotification) {
+        try {
+          const response = await axios.post(
+            "http://localhost:3000/save-notification",
+            {
+              notificationItem: copiedNotification,
+            }
+          );
+          if (response.status === 200) {
+            console.log("Успешно сохранено!");
+          } else {
+            console.log("Ошибка при сохранении:", response.status);
+          }
+        } catch (error) {
+          console.error("Ошибка при сохранении:", error);
+        }
+      }
+    },
+
+    async removeNotificationItem({ commit }, notificationId: string) {
+      try {
+        const response = await axios.delete(
+          `http://localhost:3000/delete-notification/${notificationId}`
+        );
+
+        if (response.status === 200) {
+          commit("removeNotification", notificationId);
+          console.log("Успешно удалено!");
+        } else {
+          console.log("Ошибка при удалении:", response.status);
+        }
+      } catch (error) {
+        console.error("Ошибка при удалении:", error);
       }
     },
   },

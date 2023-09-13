@@ -16,18 +16,25 @@
         />
       </el-select>
     </div>
-    <ButtonsCard :notificationId="notificationId" />
+    <ButtonsCard :buttons="buttons" :notificationId="notificationId" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, onMounted } from "vue";
+import {
+  defineComponent,
+  ref,
+  computed,
+  watch,
+  onMounted,
+  PropType,
+} from "vue";
 import TextField from "./textarea/TextField.vue";
 import { useStore } from "vuex";
-import { Bot } from "./botTypes";
+import { Button, Bot } from "../notificationTypes";
 import ButtonsCard from "./buttons/ButtonsCard.vue";
-import { ElSelect, ElOption } from "element-plus";
 
+import { ElSelect, ElOption } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
 
@@ -42,6 +49,11 @@ export default defineComponent({
   props: {
     notificationId: {
       type: String,
+      required: true,
+    },
+
+    buttons: {
+      type: Array as PropType<Button[]>,
       required: true,
     },
   },

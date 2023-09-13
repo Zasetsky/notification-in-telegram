@@ -16,7 +16,11 @@
       @next="nextStep"
       :notificationId="notificationId"
     />
-    <StepTwo v-if="activeStep === 1" :notificationId="notificationId" />
+    <StepTwo
+      v-if="activeStep === 1"
+      :buttons="buttons"
+      :notificationId="notificationId"
+    />
     <div class="notification-dialog__button-wrapper">
       <el-button class="btn" @click="cancelDialog">Отмена</el-button>
       <el-button v-if="activeStep === 0" class="fill-btn" @click="nextStep"
@@ -31,16 +35,16 @@
         >
           <chevron_back_icon :hover="hover" />Назад
         </el-button>
-        <el-button class="fill-btn" @click="saveNotification"
-          >Создать оповещение</el-button
-        >
+        <el-button class="fill-btn" @click="saveNotification">{{
+          buttonText
+        }}</el-button>
       </div>
     </div>
   </el-dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, computed } from "vue";
 import StepOne from "./steps/StepOne.vue";
 import StepTwo from "./steps/StepTwo.vue";
 import { useStore } from "vuex";
@@ -81,15 +85,35 @@ export default defineComponent({
     const isDialogVisible = ref(props.visible);
     const hover = ref(false);
 
+    const buttonText = computed(() => {
+      const currentNotification = store.getters[
+        "notifications/getNotification"
+      ](props.notificationId);
+
+      return currentNotification && currentNotification.isSaved
+        ? "Обновить оповещение"
+        : "Создать оповещение";
+    });
+
+    const buttons = computed(() =>
+      store.getters["notifications/getAllButtons"](props.notificationId)
+    );
+
     watch(
       () => props.visible,
       (newValue) => {
         isDialogVisible.value = newValue;
+        if (newValue === true) {
+          activeStep.value = 0;
+        }
       }
     );
 
-    const saveNotification = () => {
-      store.dispatch("notifications/saveNotificationItem");
+    const saveNotification = async () => {
+      await store.dispatch(
+        "notifications/saveNotificationItem",
+        props.notificationId
+      );
       activeStep.value = 0;
       emit("close");
     };
@@ -118,6 +142,8 @@ export default defineComponent({
       isDialogVisible,
       activeStep,
       hover,
+      buttonText,
+      buttons,
       closeDialog,
       cancelDialog,
       nextStep,

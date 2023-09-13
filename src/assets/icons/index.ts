@@ -8,3 +8,4 @@ export { default as crossout_icon } from "./crossout-icon.vue";
 export { default as italic_icon } from "./italic-icon.vue";
 export { default as mono_icon } from "./mono-icon.vue";
 export { default as underline_icon } from "./underline-icon.vue";
+export { default as copy_icon } from "./copy-icon.vue";

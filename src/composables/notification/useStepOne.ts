@@ -62,7 +62,6 @@ export default function useStepOne(notificationId: string) {
   };
 
   onMounted(async () => {
-    await store.dispatch("notifications/fetchInitialNotifications");
     await store.dispatch("employees/fetchEmployees");
   });
 

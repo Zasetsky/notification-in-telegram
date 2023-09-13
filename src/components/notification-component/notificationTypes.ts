@@ -43,6 +43,7 @@ export interface Notification {
   id: string;
   name: string;
   data: NotificationData;
+  isSaved: boolean;
 }
 
 export interface NotificationState {
