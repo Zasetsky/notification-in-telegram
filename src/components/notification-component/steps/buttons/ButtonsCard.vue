@@ -50,7 +50,8 @@ export default defineComponent({
 
   setup(props) {
     const { ActiveButtonTab, handleTabsEdit } = useButtonsCard(
-      props.notificationId
+      props.notificationId,
+      props.buttons
     );
 
     return {
