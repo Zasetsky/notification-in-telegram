@@ -4,6 +4,12 @@ export interface Employee {
   initial: string;
 }
 
+export interface TransferEmployee {
+  key: number;
+  label: string;
+  initial: string;
+}
+
 export interface Bot {
   label: string;
   value: string;
@@ -49,4 +55,6 @@ export interface Notification {
 export interface NotificationState {
   notificationItem: Notification[];
   cascaderOptions1: CascaderOption[];
+  tempNotificationName: string;
+  initializedComponents: Record<string, boolean>;
 }

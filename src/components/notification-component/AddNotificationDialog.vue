@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, computed } from "vue";
+import { defineComponent, ref, watch, computed, onMounted } from "vue";
 import StepOne from "./steps/StepOne.vue";
 import StepTwo from "./steps/StepTwo.vue";
 import { useStore } from "vuex";
@@ -119,6 +119,11 @@ export default defineComponent({
     };
 
     const closeDialog = () => {
+      // Сбросить флаг инициализации для этого компонента
+      store.commit("notifications/setComponentInitialized", {
+        notificationId: props.notificationId,
+        value: false,
+      });
       emit("close");
     };
 
@@ -137,6 +142,10 @@ export default defineComponent({
         hover.value = false;
       }
     };
+
+    onMounted(async () => {
+      await store.dispatch("employees/fetchEmployees");
+    });
 
     return {
       isDialogVisible,

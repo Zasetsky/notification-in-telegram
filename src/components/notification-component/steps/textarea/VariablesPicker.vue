@@ -25,7 +25,7 @@
                 v-model="search"
               >
                 <template v-slot:prefix>
-                  <i class=""></i>
+                  <search_icon />
                 </template>
               </el-input>
             </el-col>
@@ -63,6 +63,7 @@ import {
   ElOption,
   ElLoading,
 } from "element-plus";
+import { search_icon } from "@/assets/icons/index";
 
 import useVariablesPicker from "@/composables/notification/useVariablesPicker";
 
@@ -83,6 +84,7 @@ export default defineComponent({
     ElInput,
     ElSelect,
     ElOption,
+    search_icon,
   },
   props: {
     show: Boolean,

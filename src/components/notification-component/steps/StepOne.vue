@@ -4,7 +4,7 @@
       <el-input
         class="step-one--input"
         placeholder="Введите название сценария"
-        v-model="notificationName"
+        v-model="localNotificationName"
       />
 
       <p>Выберите сотрудников, которые будут получать оповещения</p>
@@ -41,28 +41,18 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, { emit }) {
+  setup(props) {
     const {
       transformedEmployees,
       selectedEmployeeKeys,
-      notificationName,
+      localNotificationName,
       filterMethod,
     } = useStepOne(props.notificationId);
-
-    const goToNextStep = () => {
-      emit("next");
-    };
-
-    const goToPreviousStep = () => {
-      emit("previous");
-    };
 
     return {
       transformedEmployees,
       selectedEmployeeKeys,
-      notificationName,
-      goToNextStep,
-      goToPreviousStep,
+      localNotificationName,
       filterMethod,
     };
   },

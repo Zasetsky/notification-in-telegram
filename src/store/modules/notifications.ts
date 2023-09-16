@@ -27,6 +27,8 @@ const notifications: Module<NotificationState, RootState> = {
   namespaced: true,
   state: {
     notificationItem: [],
+    tempNotificationName: "",
+    initializedComponents: {},
     cascaderOptions1: [],
   },
 
@@ -126,6 +128,10 @@ const notifications: Module<NotificationState, RootState> = {
       if (notifications && notifications.length > 0) {
         state.notificationItem = notifications;
       }
+    },
+
+    setComponentInitialized: (state, { notificationId, value }) => {
+      state.initializedComponents[notificationId] = value;
     },
 
     addNewNotification: (state, newNotification) => {
@@ -310,6 +316,10 @@ const notifications: Module<NotificationState, RootState> = {
       }
     },
 
+    setTempNotificationName: (state, name: string) => {
+      state.tempNotificationName = name;
+    },
+
     updateNotificationText: (
       state,
       payload: { notificationId: string; text: string }
@@ -420,6 +430,12 @@ const notifications: Module<NotificationState, RootState> = {
 
     async saveNotificationItem({ commit, state }, notificationId: string) {
       try {
+        // Обновляем имя перед сохранением
+        commit("updateNotificationName", {
+          notificationId,
+          name: state.tempNotificationName,
+        });
+
         commit("setNotificationSaved", {
           id: notificationId,
           isSaved: true,
@@ -443,6 +459,10 @@ const notifications: Module<NotificationState, RootState> = {
 
         if (response.status === 200) {
           console.log("Успешно сохранено!");
+          commit("setComponentInitialized", {
+            notificationId,
+            value: false,
+          });
         } else {
           console.log("Ошибка при сохранении:", response.status);
         }
