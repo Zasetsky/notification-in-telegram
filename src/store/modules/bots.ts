@@ -1,8 +1,5 @@
 import { Module } from "vuex";
-import {
-  StateBot,
-  Bot,
-} from "@/components/notification-component/steps/botTypes";
+import { StateBot, Bot } from "@/components/tg-bots-component/botsTypes";
 import { RootState } from "../storeTypes";
 import axios from "axios";
 

@@ -125,6 +125,9 @@ export default defineComponent({
 
 <style lang="scss">
 .notification-component {
+  font-family: "Roboto", sans-serif;
+  color: var(--el-text-color-primary);
+
   &__title {
     display: flex;
     align-items: center;
