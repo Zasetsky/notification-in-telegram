@@ -1,41 +1,56 @@
 <template>
   <div class="tg-bots-component">
-    <h4 class="tg-bots-component--header">
-      Сотрудники <span> / инструкция</span>
-    </h4>
+    <h4 class="tg-bots-component--header">Боты <span> / инструкция</span></h4>
+    <div class="tg-bots-component__copy-button-wrapper">
+      <p class="tg-bots-component__copy-button-wrapper-info">
+        По умолчанию используется бот от компании Rakurs:
+      </p>
+      <div class="tg-bots-component__copy-button">
+        <p class="tg-bots-component__copy-button-title">@rkrs_bot</p>
+        <el-button
+          @click="copyToClipboard"
+          @mouseover="isHovered = true"
+          @mouseout="isHovered = false"
+          ><copy_bot_icon :hover="isHovered" />Копировать</el-button
+        >
+      </div>
+    </div>
     <p class="tg-bots-component--info">
-      Сопоставьте менеджеров в amoCRM и Telegram для дальнейшей работы со
-      сценариями. Чтобы получить ID в Telegram, запустите бота
-      <a href="_ref">rkrs_bot</a>
+      Если вы хотите создать своего бота, вы можете воспользоваться
+      <a href="_ref">@BotFather</a> в Telegram и сохранить его, заполнив поля
+      ниже
     </p>
     <div class="tg-bots-component__grid-wrapper">
-      <div class="tg-bots-component__grid">
-        <span class="tg-bots-component__header-item">Имя</span>
-        <span class="tg-bots-component__header-item">ID в Telegram</span>
-        <span class="tg-bots-component__header-item">Пользователь amoCRM</span>
-      </div>
       <TGBotsRow v-for="(bot, index) in createdBots" :key="index" :bot="bot" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useTGBots } from "@/composables/TGBots/useTGBots";
-import { ElButton } from "element-plus";
-import "element-plus/es/components/button/style/css";
+import { copy_bot_icon } from "@/assets/icons/index";
 import TGBotsRow from "./TGBotsRow.vue";
 
+import { ElButton } from "element-plus";
+import "element-plus/es/components/button/style/css";
+
 export default defineComponent({
-  components: { ElButton, TGBotsRow },
+  components: { ElButton, copy_bot_icon, TGBotsRow },
+
   setup() {
-    const { createdBots } = useTGBots();
+    const isHovered = ref<boolean>(false);
+    const { createdBots, copyToClipboard } = useTGBots();
 
     return {
       createdBots,
+      isHovered,
+      copyToClipboard,
     };
   },
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+@import "@/assets/styles/tg-bots.scss";
+</style>

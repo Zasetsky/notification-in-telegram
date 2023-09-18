@@ -1,0 +1,36 @@
+.tg-bots-row {
+  display: flex;
+
+  &__grid {
+    display: flex;
+    flex-grow: 1;
+    box-sizing: border-box;
+  }
+
+  &__item {
+    width: 100%;
+    position: relative;
+    margin: 0 10px 25px 0;
+  }
+
+  .delete-icon {
+    cursor: pointer;
+    margin-top: 3px;
+    margin-left: 14px;
+  }
+
+  .error-border {
+    .el-input__wrapper {
+      box-shadow: 0 0 0 1px var(--el-color-error) inset;
+    }
+  }
+
+  .error-text {
+    position: absolute;
+    width: max-content;
+    top: 34px;
+    left: 5px;
+    font-size: 12px;
+    color: var(--el-color-error);
+  }
+}

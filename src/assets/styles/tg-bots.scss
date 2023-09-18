@@ -1,0 +1,116 @@
+.tg-bots-component {
+  color: var(--el-text-color-regular);
+  font-family: "Roboto", sans-serif;
+
+  .el-button {
+    color: var(--el-color-primary);
+    &:hover {
+      background-color: var(--el-color-primary);
+      color: var(--el-color-white);
+    }
+  }
+
+  &--header {
+    color: var(--el-text-color-primary);
+    padding: 20px 20px;
+    border-radius: 4px 4px 0px 0px;
+    background: var(--el-color-primary-light-9);
+    margin: 0;
+
+    span {
+      color: var(--el-color-info);
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+
+  &__copy-button-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 30px;
+
+    &-info {
+      text-wrap: nowrap;
+      width: max-content;
+    }
+  }
+
+  &__copy-button {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    width: 100%;
+
+    &-title {
+      padding: 7px 20px;
+      width: 100%;
+      color: var(--el-color-primary);
+      font-weight: 600;
+      border-radius: 4px 0px 0px 4px;
+      border-top: 1px solid var(--el-border-color);
+      border-bottom: 1px solid var(--el-border-color);
+      border-left: 1px solid var(--el-border-color);
+      background: var(--el-fill-color-lighter);
+    }
+
+    .el-button {
+      padding: 10px 20px;
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  &--info {
+    color: var(--el-text-color-regular);
+    font-size: 12px;
+    font-weight: 400;
+    border-radius: 4px;
+    background: var(--el-fill-color-light);
+    padding: 8px 12px;
+    margin: 30px 30px 0 30px;
+
+    a {
+      color: var(--el-color-primary);
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        color: var(--el-color-primary-light-5);
+      }
+    }
+  }
+
+  &__grid-wrapper {
+    padding: 30px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 15px;
+    grid-gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  &__header-item {
+    font-size: 14px;
+    font-weight: 500;
+    width: calc(100% - 24px);
+  }
+
+  .el-button--text {
+    padding: 8px;
+    font-weight: 600;
+  }
+
+  .el-button--text:not(.is-disabled):hover {
+    background-color: var(--el-fill-color-light);
+    color: var(--el-color-primary);
+  }
+
+  .el-button--text:not(.is-disabled):focus {
+    background-color: none;
+    color: var(--el-color-primary);
+  }
+}

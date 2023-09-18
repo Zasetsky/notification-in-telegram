@@ -11,6 +11,7 @@ export function useTGBotsRows() {
   const telegramTokenError = ref<boolean>(false);
   const labelFocused = ref<boolean>(false);
   const telegramTokenFocused = ref<boolean>(false);
+  const telegramTokenServerMessage = ref<string | null>(null);
 
   const store = useStore();
 
@@ -28,34 +29,36 @@ export function useTGBotsRows() {
 
   // Проверка, нужно ли отправлять данные на сервер
   const shouldSendData = (isNew: boolean, id: number | null) => {
-    // Если это не новый сотрудник, ищем его в списке выбранных сотрудников
+    // Если это не новый бот, ищем его в списке выбранных сотрудников
     if (!isNew) {
       const existingBot = createdBots.value.find((bot) => bot.id === id);
-      // Если сотрудник найден, сравниваем поля
+      // Если бот найден, сравниваем поля
       if (existingBot) {
         return (
           existingBot.label !== label.value ||
-          existingBot.token !== telegramToken.value ||
-          existingBot.value !== value.value
+          existingBot.token !== telegramToken.value
         );
       }
     }
-    // Если это новый сотрудник, отправляем данные
+    // Если это новый бот, отправляем данные
     return true;
   };
 
   // Отправка данных на сервер
   const sendData = async (apiUrl: string, id: number | null) => {
     try {
-      // Отправляем POST-запрос с данными сотрудника
-      await axios.post(apiUrl, {
+      const response = await axios.post(apiUrl, {
         label: label.value,
         token: telegramToken.value,
         value: value.value,
         isNew: false,
       });
 
-      // Обновляем данные сотрудника в хранилище Vuex
+      if (response.data.error) {
+        telegramTokenServerMessage.value = response.data.error;
+        return;
+      }
+
       store.commit("employees/updateSelectedEmployee", {
         id,
         label: label.value,
@@ -64,11 +67,10 @@ export function useTGBotsRows() {
         isNew: false,
       });
 
-      // Сбрасываем флаги ошибок
       labelError.value = false;
       telegramTokenError.value = false;
+      telegramTokenServerMessage.value = null;
     } catch (error) {
-      // Выводим ошибку в консоль, если что-то пошло не так
       console.error("Ошибка при отправке данных:", error);
     }
   };
@@ -106,26 +108,35 @@ export function useTGBotsRows() {
     }
   };
 
-  const deleteBot = async (id: number | null) => {
-    try {
-      // Проверяем, является ли это последним элементом
-      if (createdBots.value.length > 1) {
-        await axios.delete(`http://localhost:3000/delete-employee/${id}`);
+  const saveBot = async (isNew: boolean, id: number | null) => {
+    await checkAndSubmit("label", isNew, id);
+    await checkAndSubmit("telegramToken", isNew, id);
+    labelFocused.value = false;
+    telegramTokenFocused.value = false;
+  };
 
-        // Удалить локально из createdBots
-        store.commit("employees/deleteSelectedEmployee", id);
-      } else {
-        // Если это последний элемент, обнуляем все поля
-        store.commit("employees/updateSelectedEmployee", {
-          id,
-          label: "",
-          telegramToken: "",
-          value: null,
-          isNew: true,
-        });
-      }
+  const clearFields = async (id: number | null) => {
+    try {
+      // Отправляем DELETE-запрос на сервер для удаления бота
+      await axios.post(`http://localhost:3000/clear-bot-fields/${id}`);
+
+      // Обновляем локальное состояние
+      store.commit("bots/updateSingleBot", {
+        id,
+        label: "",
+        telegramToken: "",
+        isNew: true,
+      });
+
+      // Очистка полей и сброс флагов
+      label.value = "";
+      telegramToken.value = "";
+      labelError.value = false;
+      telegramTokenError.value = false;
+      labelFocused.value = false;
+      telegramTokenFocused.value = false;
     } catch (error) {
-      console.error("Ошибка при удалении бота:", error);
+      console.error("Ошибка при очистке полей:", error);
     }
   };
 
@@ -137,7 +148,8 @@ export function useTGBotsRows() {
     telegramTokenError,
     labelFocused,
     telegramTokenFocused,
-    checkAndSubmit,
-    deleteBot,
+    telegramTokenServerMessage,
+    saveBot,
+    clearFields,
   };
 }

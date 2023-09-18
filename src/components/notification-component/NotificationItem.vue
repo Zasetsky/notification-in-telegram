@@ -8,7 +8,7 @@
   >
     <span :class="{ hover: isHovering }">{{ data.name }}</span>
     <div class="notification-item__icons-wrapper">
-      <copy_icon
+      <copy_notification_icon
         @click.stop="cloneAndSaveNotification"
         style="margin-right: 24px"
       />
@@ -22,11 +22,11 @@ import { defineComponent, PropType, ref } from "vue";
 import { Notification } from "./notificationTypes";
 import { useStore } from "vuex";
 
-import { copy_icon, delete_icon } from "@/assets/icons/index";
+import { copy_notification_icon, delete_icon } from "@/assets/icons/index";
 
 export default defineComponent({
   components: {
-    copy_icon,
+    copy_notification_icon,
     delete_icon,
   },
 
