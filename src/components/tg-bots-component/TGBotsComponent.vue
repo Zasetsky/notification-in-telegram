@@ -17,7 +17,7 @@
     </div>
     <p class="tg-bots-component--info">
       Если вы хотите создать своего бота, вы можете воспользоваться
-      <a href="https://telegram.me/BotFather">@BotFather</a> в Telegram и
+      <a href="https://telegram.me/BotFather" target="_blank">@BotFather</a> в Telegram и
       сохранить его, заполнив поля ниже
     </p>
     <div class="tg-bots-component__grid-wrapper">
