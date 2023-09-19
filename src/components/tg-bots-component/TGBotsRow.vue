@@ -51,8 +51,7 @@ import { delete_icon, save_icon } from "@/assets/icons/index";
 import { ElInput, ElButton } from "element-plus";
 import "element-plus/es/components/button/style/css";
 import "element-plus/es/components/input/style/css";
-import "element-plus/es/components/select/style/css";
-import "element-plus/es/components/option/style/css";
+import "element-plus/es/components/message/style/css";
 
 export default defineComponent({
   components: {
@@ -71,6 +70,7 @@ export default defineComponent({
 
   setup(props) {
     const isHovered = ref<boolean>(false);
+
     const {
       label,
       telegramToken,

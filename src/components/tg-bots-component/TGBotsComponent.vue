@@ -1,5 +1,5 @@
 <template>
-  <div class="tg-bots-component">
+  <div class="tg-bots-component" v-loading="loading">
     <h4 class="tg-bots-component--header">Боты <span> / инструкция</span></h4>
     <div class="tg-bots-component__copy-button-wrapper">
       <p class="tg-bots-component__copy-button-wrapper-info">
@@ -32,19 +32,25 @@ import { useTGBots } from "@/composables/TGBots/useTGBots";
 import { copy_bot_icon } from "@/assets/icons/index";
 import TGBotsRow from "./TGBotsRow.vue";
 
-import { ElButton } from "element-plus";
+import { ElButton, vLoading } from "element-plus";
 import "element-plus/es/components/button/style/css";
+import "element-plus/es/components/loading/style/css";
 
 export default defineComponent({
+  directives: {
+    loading: vLoading,
+  },
+
   components: { ElButton, copy_bot_icon, TGBotsRow },
 
   setup() {
     const isHovered = ref<boolean>(false);
-    const { createdBots, copyToClipboard } = useTGBots();
+    const { createdBots, loading, copyToClipboard } = useTGBots();
 
     return {
       createdBots,
       isHovered,
+      loading,
       copyToClipboard,
     };
   },

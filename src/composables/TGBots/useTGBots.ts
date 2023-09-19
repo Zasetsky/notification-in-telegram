@@ -5,6 +5,8 @@ import { Bot } from "@/components/tg-bots-component/botsTypes";
 export function useTGBots() {
   const store = useStore();
 
+  const loading = computed(() => store.state.bots.loading);
+
   const createdBots = computed<Bot[]>(() => {
     return store.getters["bots/getAvailableBots"];
   });
@@ -23,6 +25,7 @@ export function useTGBots() {
 
   return {
     createdBots,
+    loading,
     copyToClipboard,
   };
 }

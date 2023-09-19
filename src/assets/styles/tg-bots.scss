@@ -4,6 +4,8 @@
 
   .el-button {
     color: var(--el-color-primary);
+    border: 1px solid var(--el-color-primary-light-5);
+    background: var(--el-color-primary-light-9);
     &:hover {
       background-color: var(--el-color-primary);
       color: var(--el-color-white);
@@ -83,14 +85,7 @@
   }
 
   &__grid-wrapper {
-    padding: 30px;
-  }
-
-  &__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 15px;
-    grid-gap: 14px;
-    margin-bottom: 20px;
+    padding: 10px 30px;
   }
 
   &__header-item {

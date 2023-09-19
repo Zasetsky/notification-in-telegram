@@ -10,6 +10,7 @@ const bots: Module<StateBot, RootState> = {
       { id: 1, label: "", token: "", isNew: false },
       { id: 2, label: "", token: "", isNew: false },
     ],
+    loading: false,
   },
 
   getters: {
@@ -49,17 +50,24 @@ const bots: Module<StateBot, RootState> = {
       );
       state.availableBots[index] = updatedBot;
     },
+
+    setLoading: (state: StateBot, status: boolean) => {
+      state.loading = status;
+    },
   },
 
   actions: {
     fetchAvailableBots({ commit }) {
+      commit("setLoading", true);
       axios
         .get("http://localhost:3000/get-telegram-bots") // Сменить на нужный сервер!!!
         .then((response) => {
           commit("setAvailableBots", response.data);
+          commit("setLoading", false);
         })
         .catch((error) => {
           console.error("Ошибка при получении ботов:", error);
+          commit("setLoading", false);
         });
     },
   },

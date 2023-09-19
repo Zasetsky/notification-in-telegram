@@ -1,6 +1,7 @@
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { Bot } from "@/components/tg-bots-component/botsTypes";
+import { ElMessage } from "element-plus";
 import axios from "axios";
 
 export function useTGBotsRows() {
@@ -46,6 +47,7 @@ export function useTGBotsRows() {
 
   // Отправка данных на сервер
   const sendData = async (apiUrl: string, id: number | null) => {
+    store.commit("bots/setLoading", true);
     try {
       const response = await axios.post(apiUrl, {
         label: label.value,
@@ -54,8 +56,13 @@ export function useTGBotsRows() {
         isNew: false,
       });
 
+      if (response.data.message) {
+        telegramTokenServerMessage.value = response.data.message;
+        return;
+      }
+
       if (response.data.error) {
-        telegramTokenServerMessage.value = response.data.error;
+        ElMessage.error(response.data.error);
         return;
       }
 
@@ -72,6 +79,8 @@ export function useTGBotsRows() {
       telegramTokenServerMessage.value = null;
     } catch (error) {
       console.error("Ошибка при отправке данных:", error);
+    } finally {
+      store.commit("bots/setLoading", false);
     }
   };
 
@@ -116,8 +125,8 @@ export function useTGBotsRows() {
   };
 
   const clearFields = async (id: number | null) => {
+    store.commit("bots/setLoading", true);
     try {
-      // Отправляем DELETE-запрос на сервер для удаления бота
       await axios.post(`http://localhost:3000/clear-bot-fields/${id}`);
 
       // Обновляем локальное состояние
@@ -137,6 +146,8 @@ export function useTGBotsRows() {
       telegramTokenFocused.value = false;
     } catch (error) {
       console.error("Ошибка при очистке полей:", error);
+    } finally {
+      store.commit("bots/setLoading", false);
     }
   };
 

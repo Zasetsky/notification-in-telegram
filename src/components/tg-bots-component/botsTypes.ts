@@ -7,4 +7,5 @@ export interface Bot {
 
 export interface StateBot {
   availableBots: Bot[];
+  loading: boolean;
 }
