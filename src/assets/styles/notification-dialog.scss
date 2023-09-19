@@ -29,6 +29,10 @@
 
       &:disabled {
         background: var(--el-color-primary-light-5);
+
+        &:hover {
+          background: var(--el-color-primary-light-5);
+        }
       }
 
       &:hover {

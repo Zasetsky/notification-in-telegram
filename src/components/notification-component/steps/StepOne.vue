@@ -3,7 +3,7 @@
     <div class="step-one__fields-wrapper">
       <el-input
         class="step-one--input"
-        placeholder="Введите название сценария"
+        placeholder="Введите название оповещения"
         v-model="localNotificationName"
       />
 
