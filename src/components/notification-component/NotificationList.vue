@@ -159,8 +159,7 @@ export default defineComponent({
       background: var(--el-fill-color-light);
 
       &:hover {
-        background: var(--el-color-primary);
-        color: var(--el-color-white);
+        background: var(--el-fill-color);
       }
     }
   }
