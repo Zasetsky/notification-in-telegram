@@ -23,7 +23,11 @@
     />
     <div class="notification-dialog__button-wrapper">
       <el-button class="btn" @click="cancelDialog">Отмена</el-button>
-      <el-button v-if="activeStep === 0" class="fill-btn" @click="nextStep"
+      <el-button
+        v-if="activeStep === 0"
+        class="fill-btn"
+        @click="nextStep"
+        :disabled="isNextButtonDisabled"
         >Далее <chevron_icon
       /></el-button>
       <div v-if="activeStep === 1">
@@ -99,6 +103,16 @@ export default defineComponent({
       store.getters["notifications/getAllButtons"](props.notificationId)
     );
 
+    const isNextButtonDisabled = computed(() => {
+      const currentNotification = store.getters[
+        "notifications/getNotification"
+      ](props.notificationId);
+      if (!currentNotification) return true; // если уведомление не найдено, блокируем кнопку
+      const { selectedEmployees } = currentNotification.data;
+      const name = store.state.notifications.tempNotificationName;
+      return selectedEmployees.length === 0 || !name;
+    });
+
     watch(
       () => props.visible,
       (newValue) => {
@@ -124,6 +138,8 @@ export default defineComponent({
         notificationId: props.notificationId,
         value: false,
       });
+
+      store.commit("notifications/setTempNotificationName", "");
       emit("close");
     };
 
@@ -153,6 +169,7 @@ export default defineComponent({
       hover,
       buttonText,
       buttons,
+      isNextButtonDisabled,
       closeDialog,
       cancelDialog,
       nextStep,

@@ -90,7 +90,7 @@ export default defineComponent({
       };
       const newNotification: Notification = {
         id: newId,
-        name: "Новое оповещение",
+        name: "",
         isSaved: false,
         data: {
           selectedEmployees: [],
